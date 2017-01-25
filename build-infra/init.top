@@ -1,0 +1,15 @@
+base:
+  dom0:
+    - build-infra.dom0
+  fedora-24:
+    - build-infra.template-build
+  fedora-24-minimal:
+    - build-infra.template-keys
+  build-logs:
+    - build-infra.build-logs
+{%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
+  keys-{{env}}:
+    - build-infra.keys-vm
+  build-{{env}}:
+    - build-infra.build-vm
+{%- endfor %}

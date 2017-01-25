@@ -1,0 +1,22 @@
+# vim: set syntax=yaml ts=2 sw=2 sts=2 et :
+
+package-name:   qubes-mgmt-salt-dom0-qubes-infrastructure
+saltenv:        base
+version:        1.0.0
+release:        1
+name:           qubes-infrastructure
+top_level_dir:  build-infra
+formula-files:  build-infra LICENSE README.md
+pillar-files:   pillar/build-infra
+formula_dir:    $(MGMT_DEFAULT_FORMULA_DIR)/$(MGMT_SALTENV)/$(MGMT_NAME)
+pillar_dir:     $(MGMT_DEFAULT_PILLAR_DIR)/$(MGMT_SALTENV)/$(MGMT_TOP_LEVEL_DIR)
+os:             Qubes
+os_family:      RedHat
+summary:        Manage Qubes OS infrastructure VMs
+description: |
+  Create VMs used to build and distribute Qubes OS packages
+
+pillar-tops:
+  base:
+    enable:
+      - build-infra

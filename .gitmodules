@@ -1,0 +1,3 @@
+[submodule "build-infra/qubes-builder"]
+	path = build-infra/qubes-builder
+	url = https://github.com/qubesos/qubes-builder

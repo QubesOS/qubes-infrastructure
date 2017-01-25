@@ -1,0 +1,5 @@
+base:
+  '*':
+    - build-infra
+  build-logs:
+    - build-infra.build-logs
