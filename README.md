@@ -48,9 +48,10 @@ attacks harder, for attacker controlling 3rd-party signing key. Ssh is used only
  - download our code from github (where it's authenticated using gpg)
  - upload binary packages to appropriate repositories
 
-Technically it's done by running SOCKS proxy (`3proxy`) in `sys-net` and
-exposing access to it via qrexec service. Then configure ssh to use that
-service (`ProxyCommand` in `~/.ssh/config`).
+Technically it's done by running configuring ssh (`ProxyCommand` in
+`~/.ssh/config`) to use `local.ConnectSSH` service to `sys-net` (and pass
+destination hostname in service argument), instead of establishing TCP
+connection directly. `local.ConnectSSH` service is implemented as simple netcat.
 
 ### Usage:
 
