@@ -109,6 +109,65 @@ The above workflow and used qrexec services can be illustrated with the diagram 
         |               |                          '-.( ).-'    
         '---------------'
 
+The build process may be triggered manually (be calling appropriate `make`
+command in some of build VM), or in response to github notification. The later
+is achieved using
+[builder-github](https://github.com/QubesOS/qubes-builder-github), which
+provide webhooks and qrexec services to handle this process. It boils down to:
+
+1. HTTP server in `sys-net` (nginx) receive HTTP POST request from github with
+   information about an event in repository. It is handed to appropriate
+   handler script from `github-webhooks` directory of `builder-github`.
+2. Webhook handler extract essential data (for example repository name) and
+   send it to all build VMs using `qubesbuilder.TriggerBuild` qrexec service.
+3. Qrexec service in a build VM check if the named component exists in any of
+   `qubes-builder` instance and call `scripts/auto-build` build script. This
+   script check if anything new needs to be built - and if so, build it and
+   upload to current-testing repository. This, among other things, report
+   successful (or failed) build as an issue in appropriate repository.
+
+Very similar approach is used to move packages from `current-testing` to
+`current` repository:
+
+1. HTTP server in `sys-net` (nginx) receive HTTP POST request from github with
+   information about an comment on issue. It is handed to appropriate
+   handler script from `github-webhooks` directory of `builder-github`.
+2. Webhook handler extract commend body, check if it have any PGP-signed data
+   (but do not verify it yet) and
+   send it to all build VMs using `qubesbuilder.ProcessGithubCommand` qrexec service.
+3. Qrexec service in a build VM check signature on the commend and if it's made
+   by a trusted key, process the command. See documentation in
+   [builder-github](https://github.com/QubesOS/qubes-builder-github) for
+   details.
+
+
+
+           .-,(  ),-.                     .------------.
+        .-(          )-.    HTTP POST     | sys-net    |
+       (     github     )****************>|            |
+        '-(          ).-'                 |            |
+            '-.( ).-'                     '------------'
+                ^                                |
+                *                 qubesbuilder.TriggerBuild
+       github issue/comment       qubesbuilder.ProcessGithubCommand
+                *                                |
+                *          .----------.          |
+                ***********| build VM |<---------|
+                *          '----------'          |
+                *                                |
+                *          .----------.          |
+                ***********| build VM |<---------'
+                *          '----------'
+                *
+             packages
+                *
+                v
+           .-,(  ),-.
+        .-(          )-.
+       (   repository   )
+        '-(          ).-'
+            '-.( ).-'
+
 
 In addition to the above, build VM use Tor to download 3rd-party software
 (including build dependencies etc). This is to make _targeted_ attack as hard as

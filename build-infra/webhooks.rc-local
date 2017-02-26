@@ -1,0 +1,9 @@
+# github IP range
+iptables -I INPUT -p tcp -s 192.30.252.0/22 --dport 80 -j ACCEPT
+
+ln -s /rw/config/webhooks.nginx /etc/nginx/default.d/webhooks.conf
+ln -s /rw/config/webhooks.service /etc/systemd/system/webhooks.service
+ln -s /rw/config/webhooks.socket /etc/systemd/system/webhooks.socket
+systemctl daemon-reload
+systemctl --no-block start webhooks.socket
+systemctl --no-block start nginx.service

@@ -1,0 +1,4 @@
+location ~ ^/github-hooks/ {
+    include /etc/nginx/fastcgi_params;
+    fastcgi_pass unix:/var/run/qubes/github-webhooks.sock;
+}

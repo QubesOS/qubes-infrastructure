@@ -6,6 +6,25 @@
     - mode: 0775
     - makedirs: True
 
+/usr/local/etc/qubes-rpc/qubesbuilder.TriggerBuild:
+  file.managed:
+    - source: salt://build-infra/qubes-builder-github/rpc-services/qubesbuilder.TriggerBuild
+    - mode: 0755
+    - makedirs: True
+
+/usr/local/etc/qubes-rpc/qubesbuilder.ProcessGithubCommand:
+  file.managed:
+    - source: salt://build-infra/qubes-builder-github/rpc-services/qubesbuilder.ProcessGithubCommand
+    - mode: 0755
+    - makedirs: True
+
+/home/user/.config/qubes-builder-github/builders.list:
+  file.managed:
+    - mode: 0644
+    - user: user
+    - contents_pillar: build-infra:builders-list
+    - makedirs: True
+
 /rw/config/gpg-split-domain:
   file.managed:
     - contents:

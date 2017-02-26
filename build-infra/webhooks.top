@@ -1,0 +1,9 @@
+base:
+  # assume sys-net is on fedora-24 template
+  fedora-24:
+    - build-infra.template-net
+  sys-net:
+    - build-infra.webhooks-base
+    - build-infra.webhooks-builder
+  dom0:
+    - build-infra.webhooks-dom0
