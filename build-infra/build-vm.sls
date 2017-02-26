@@ -57,3 +57,15 @@ echo {{qubes_master_key_fpr}}:6 | gpg --import-ownertrust:
     - requires:
       - gpg: {{qubes_master_key_fpr}}
 
+/home/user/builder-github.conf:
+  file.managed:
+    - source: salt://build-infra/builder-github.conf
+    - template: jinja
+    - user: user
+    - mode: 0600
+
+/home/user/github-notify-state:
+  file.directory:
+    - makedirs: True
+    - user: user
+    - mode: 0755

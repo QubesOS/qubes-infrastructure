@@ -3,3 +3,6 @@ base:
     - build-infra
   build-logs:
     - build-infra.build-logs
+# enable this for all build VMs
+# not possible to list them automatically, as grains not loaded yet
+#   - build-infra.build-vms
