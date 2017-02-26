@@ -32,24 +32,17 @@
     - mode: 0644
     - user: user
 
-# populate keys to ease qubes-builder verification
-{{qubes_master_key_fpr}}:
-  gpg.present:
+/home/user/qubes-master-key.asc:
+  file.managed:
+    - source: salt://build-infra/qubes-master-key.asc
     - user: user
-# this does not work when fpr is used instead of keyid; and gpg.present does
-# not allow to specify fpr
-#    - trust: ultimately
 
-# gpg module (until salt 2016.3.4) does not chown keyring (bug 36824)
-/home/user/.gnupg:
-  file.directory:
-    - user: user
-    - group: user
-    - recurse:
-      - user
-      - group
+# populate keys to ease qubes-builder verification
+gpg --import /home/user/qubes-master-key.asc:
+  cmd.run:
+    - runas: user
     - onchange:
-      - gpg: {{qubes_master_key_fpr}}
+      - file: /home/user/qubes-master-key.asc
 
 echo {{qubes_master_key_fpr}}:6 | gpg --import-ownertrust:
   cmd.run:
