@@ -18,13 +18,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 # This file is generated from FORMULA* by yaml-dumper in mgmt-salt builder plugin
-include Makefile.vars
+-include Makefile.vars
 
 # This file is copied in from mgmt-salt
-include Makefile.install
+-include Makefile.install
 
 .PHONY: install-custom
 install-custom::
 	# Install /etc/salt/* and /srv/*
 	cp -Tr etc $(DESTDIR)/etc
 
+get-sources:
+	git submodule update --init --recursive
+
+# nothing to be done, because git submodules are referenced by exact commit id (hash)
+verify-sources:
+	@true
