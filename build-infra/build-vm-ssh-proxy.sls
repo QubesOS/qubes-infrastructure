@@ -1,6 +1,8 @@
 /home/user/.ssh/config:
   file.append:
     - makedirs: True
+    - user: user
+    - group: user
     - text: |
         Host *
             ControlMaster auto
