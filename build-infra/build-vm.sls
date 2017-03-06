@@ -32,6 +32,13 @@
     - mode: 0644
     - user: user
 
+/home/user/.rpmmacros:
+  file.managed:
+    - source: salt://build-infra/rpmmacros
+    - mode: 0644
+    - user: user
+    - group: user
+
 /home/user/qubes-master-key.asc:
   file.managed:
     - source: salt://build-infra/qubes-master-key.asc
