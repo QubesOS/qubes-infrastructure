@@ -36,7 +36,7 @@ Example pillar is provided in `/srv/pillar/base/qubesos-infra/build-infra.sls`.
         qubesctl --all state.highstate
 
 3. Provision gpg signing keys into appropriate `keys-` VMs, setup qubes-builder
-   in appropriate `build-` VMs.
+   in appropriate `build-` VMs. See below for detailed list.
 
 
 `build-infra.ssh-proxy` formula
@@ -197,3 +197,36 @@ Especially:
   log really corresponds to the binary received for signing. But since every
   build is logged in real time and it's a requirement for having package
   signed, logs will be available (publicly) and can be audited.
+
+
+Post installation steps
+------------------------
+
+Configuration tasks not included in this formula:
+
+1. In each keys VM:
+
+   - [ ] generate/import appropriate signing key
+
+2. In each build VM:
+
+   - [ ] generate/import ssh key used to upload packages
+   - [ ] set username in `.ssh/config` for host where packages are uploaded (`yum.qubes-os.org`, `deb.qubes-os.org` etc)
+   - [ ] populate `.ssh/known_hosts` for example by logging into updates server and verifying fingerprint
+   - [ ] clone (and verify signed tag!) `qubes-builder` into directories listed in `~/.config/qubes-builder-github/builders.list`
+   - [ ] setup `builder.conf` in each instance, based on appropriate config in `example-configs/`. Important steps:
+
+     - drop `NO_SIGN ?= 1` line
+     - adjust `DISTS_VM` and `DIST_DOM0` if needed (must be set using `?=` operator)
+     - adjust COMPONENTS, add builder-github there (must be set using `?=` operator, cannot use `+=`)
+     - set `SIGN_KEY` to appropriate key id (the one in maching keys VM)
+     - set `LINUX_REPO_BASEDIR` to a appropriate directory (pointing exact release version, like `$(SRC_DIR)/linux-yum/r4.0`)
+     - include `$(HOME)/builder-github.conf`
+   - [ ] populate `~/.config/qubes-builder-github/trusted-keys-for-commands.gpg` keyring with keys authorized to perform repository operations
+
+3. In `build-logs` VM:
+
+  - [ ] generate/import ssh key, add it to QubesOS/build-logs repository as deploy key with write access
+  - [ ] import logs signing key
+
+4. Make sure build VMs are large enough.
