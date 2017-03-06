@@ -48,7 +48,7 @@ make install DESTDIR=%{buildroot} LIBDIR=%{_libdir} BINDIR=%{_bindir} SBINDIR=%{
 %config(noreplace) /srv/pillar/base/build-infra/init.sls
 %config(noreplace) /srv/pillar/base/build-infra/build-logs.sls
 %config(noreplace) /srv/pillar/base/build-infra/build-vms.sls
-/srv/pillar/base/build-infra/init.top
+%config(noreplace) /srv/pillar/base/build-infra/init.top
 
 %config(noreplace) /etc/salt/minion.d/qubes-infrastructure.conf
 
