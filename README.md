@@ -142,32 +142,32 @@ Very similar approach is used to move packages from `current-testing` to
 
 
 
-           .-,(  ),-.                     .------------.
-        .-(          )-.    HTTP POST     | sys-net    |
-       (     github     )****************>|            |
-        '-(          ).-'                 |            |
-            '-.( ).-'                     '------------'
-                ^                                |
-                *                 qubesbuilder.TriggerBuild
-       github issue/comment       qubesbuilder.ProcessGithubCommand
-                *                                |
-                *          .----------.          |
-                ***********| build VM |<---------|
-                *          '----------'          |
-                *                                |
-                *          .----------.          |
-                ***********| build VM |<---------'
-                *          '----------'
-                *
-             packages
-                *
-                v
-           .-,(  ),-.
-        .-(          )-.
-       (   repository   )
-        '-(          ).-'
-            '-.( ).-'
-
+               .-,(  ),-.                     .------------.
+            .-(          )-.    HTTP POST     | sys-net    |
+           (     github     )****************>|            |
+            '-(          ).-'                 |            |
+                '-.( ).-'                     '------------'
+                    ^                                |
+                    *                 qubesbuilder.TriggerBuild
+           github issue/comment       qubesbuilder.ProcessGithubCommand
+                    *                                |
+                    *          .----------.          |
+                    ***********| build VM |<---------|
+                    *          '----------'          |
+                    *                                |
+                    *          .----------.          |
+                    ***********| build VM |<---------'
+                    *          '----------'
+                    *
+                 packages
+                    *
+                    v
+               .-,(  ),-.
+            .-(          )-.
+           (   repository   )
+            '-(          ).-'
+                '-.( ).-'
+    
 
 In addition to the above, build VM use Tor to download 3rd-party software
 (including build dependencies etc). This is to make _targeted_ attack as hard as
