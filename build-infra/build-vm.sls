@@ -1,4 +1,5 @@
 {% set qubes_master_key_fpr = '427F11FD0FAA4B080123F01CDDFA1A3E36879494' %}
+{% set commands_keyring = '/home/user/.config/qubes-builder-github/trusted-keys-for-commands.gpg' %}
 
 /usr/local/etc/qubes-rpc/qubesbuilder.CopyTemplateBack:
   file.managed:
@@ -69,3 +70,16 @@ echo {{qubes_master_key_fpr}}:6 | gpg --import-ownertrust:
     - makedirs: True
     - user: user
     - mode: 0755
+
+/home/user/trusted-keys-for-commands.asc:
+  file.managed:
+    - contents_pillar: build-infra:commands_public_keys
+    - user: user
+    - mode: 0644
+
+commands-keyring:
+  cmd.run:
+    - name: rm -f {{ commands_keyring }}; gpg2 --no-default-keyring --keyring {{ commands_keyring }} --import /home/user/trusted-keys-for-commands.asc
+    - runas: user
+    - onchange:
+      - file: /home/user/trusted-keys-for-commands.asc
