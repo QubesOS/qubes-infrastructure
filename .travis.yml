@@ -1,0 +1,7 @@
+sudo: required
+dist: trusty
+language: generic
+install: git clone https://github.com/QubesOS/qubes-builder ~/qubes-builder
+script: ~/qubes-builder/scripts/travis-build
+env:
+ - DIST_DOM0=fc23 USE_QUBES_REPO_VERSION=3.2 USE_QUBES_REPO_TESTING=1
