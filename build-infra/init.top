@@ -1,9 +1,9 @@
 base:
   dom0:
     - build-infra.dom0
-  fedora-24:
+  {{ salt['pillar.get']('build-infra:build-template', 'fedora-24') }}:
     - build-infra.template-build
-  fedora-24-minimal:
+  {{ salt['pillar.get']('build-infra:keys-template', 'fedora-24-minimal') }}:
     - build-infra.template-keys
   build-logs:
     - build-infra.build-logs
