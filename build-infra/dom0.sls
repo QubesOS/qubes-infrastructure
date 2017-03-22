@@ -1,17 +1,17 @@
 build-logs:
   qvm.vm:
     - present:
-        - label: green
+      - label: green
     - prefs:
-        - template: fedora-24
-        - netvm: sys-firewall
+      - template: fedora-24
+      - netvm: sys-firewall
 
 /etc/qubes-rpc/policy/qubes.Gpg:
   file.prepend:
     - text:
 {%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
-        - build-{{env}} keys-{{env}} allow
-        - $anyvm keys-{{env}} deny
+      - build-{{env}} keys-{{env}} allow
+      - $anyvm keys-{{env}} deny
 {% endfor %}
 
 
@@ -22,10 +22,10 @@ build-logs:
 build-{{env}}:
   qvm.vm:
     - present:
-       - label: green
+      - label: green
     - prefs:
-       - template: fedora-24
-       - netvm: sys-whonix
+      - template: fedora-24
+      - netvm: sys-whonix
 
 keys-{{env}}:
   qvm.vm:
