@@ -14,6 +14,7 @@ builder-dependencies:
       - wget
       - curl
       - qubes-gpg-split
+      - PyYAML
 # for salt gpg module
       - gnupg
       - python2-gnupg
