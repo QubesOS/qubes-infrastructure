@@ -50,3 +50,30 @@ keys-{{env}}:
 {%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
       - build-{{env}} dom0 allow,target=build-logs
 {% endfor %}
+
+/etc/qubes-rpc/qubesbuilder.ExportDisk:
+  file.managed:
+    - source: salt://build-infra/qubes-builder/rpc-services/qubesbuilder.ExportDisk
+    - mode: 0755
+    - makedirs: True
+
+/etc/qubes-rpc/qubesbuilder.AttachDisk:
+  file.managed:
+    - source: salt://build-infra/qubes-builder/rpc-services/qubesbuilder.AttachDisk
+    - mode: 0755
+    - makedirs: True
+
+/etc/qubes-rpc/policy/qubesbuilder.AttachDisk:
+  file.managed:
+    - source: salt://build-infra/qubes-builder/rpc-services/policy/qubesbuilder.AttachDisk
+    - mode: 0664
+    - makedirs: True
+
+/etc/qubes-rpc/policy/qubesbuilder.ExportDisk:
+  file.managed:
+    - mode: 0664
+    - makedirs: True
+    - contents:
+{%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
+      - build-{{env}} dom0 allow
+{% endfor %}
