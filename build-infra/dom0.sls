@@ -77,3 +77,12 @@ keys-{{env}}:
 {%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
       - build-{{env}} dom0 allow
 {% endfor %}
+
+/etc/qubes-rpc/policy/qubesbuilder.CopyTemplateBack:
+  file.managed:
+    - mode: 0664
+    - makedirs: True
+    - contents:
+{%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
+      - $anyvm build-{{env}} allow
+{% endfor %}
