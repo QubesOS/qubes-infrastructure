@@ -8,7 +8,7 @@ builder-dependencies:
       - rpm-build
       - rpm-sign
       - make
-      - python-sh
+      - python2-sh
       - rpmdevtools
       - dialog
       - wget
