@@ -4,6 +4,7 @@ build-infra:
 # list of build environments:
   build-envs:
     - fedora
+    - centos
     - debian
 # Default NetVMs and templates:
 #  logs-template: fedora-25
