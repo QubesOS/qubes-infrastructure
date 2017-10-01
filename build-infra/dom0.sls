@@ -3,7 +3,7 @@ build-logs:
     - present:
       - label: green
     - prefs:
-      - template: {{ salt['pillar.get']('build-infra:logs-template', 'fedora-25') }}
+      - template: {{ salt['pillar.get']('build-infra:logs-template', 'fedora-26') }}
       - netvm: {{ salt['pillar.get']('build-infra:logs-netvm', 'sys-firewall') }}
 
 /etc/qubes-rpc/policy/qubes.Gpg:
@@ -24,7 +24,7 @@ build-{{env}}:
     - present:
       - label: green
     - prefs:
-      - template: {{ salt['pillar.get']('build-infra:build-template', 'fedora-25') }}
+      - template: {{ salt['pillar.get']('build-infra:build-template', 'fedora-26') }}
       - netvm: {{ salt['pillar.get']('build-infra:build-netvm', 'sys-whonix') }}
 
 keys-{{env}}:
@@ -32,7 +32,7 @@ keys-{{env}}:
     - present:
       - label: black
     - prefs:
-      - template: {{ salt['pillar.get']('build-infra:keys-template', 'fedora-25-minimal') }}
+      - template: {{ salt['pillar.get']('build-infra:keys-template', 'fedora-26-minimal') }}
       - netvm: none
 
 /etc/qubes-rpc/policy/qubesbuilder.LogReceived+build-{{env}}:
