@@ -15,6 +15,9 @@ builder-dependencies:
       - curl
       - qubes-gpg-split
       - PyYAML
+# dpkg-scanpackages
+      - perl-Digest-MD5
+      - perl-Digest-SHA
 # for salt gpg module
       - gnupg
       - python2-gnupg
