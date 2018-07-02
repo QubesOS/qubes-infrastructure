@@ -1,21 +1,32 @@
 {% set qubes_master_key_fpr = '427F11FD0FAA4B080123F01CDDFA1A3E36879494' %}
 {% set commands_keyring = '/home/user/.config/qubes-builder-github/trusted-keys-for-commands.gpg' %}
+{% set last_builder_dir = (salt['pillar.get']('build-infra:builders-list').splitlines()|last).split('=')|last %}
 
 /usr/local/etc/qubes-rpc/qubesbuilder.CopyTemplateBack:
-  file.managed:
-    - source: salt://build-infra/qubes-builder/rpc-services/qubesbuilder.CopyTemplateBack
+  file.symlink:
+    - target: {{ last_builder_dir }}/rpc-services/qubesbuilder.CopyTemplateBack
+    - force: True
     - mode: 0775
     - makedirs: True
 
 /usr/local/etc/qubes-rpc/qubesbuilder.TriggerBuild:
-  file.managed:
-    - source: salt://build-infra/qubes-builder-github/rpc-services/qubesbuilder.TriggerBuild
+  file.symlink:
+    - target: {{ last_builder_dir }}/qubes-src/builder-github/rpc-services/qubesbuilder.TriggerBuild
+    - force: True
     - mode: 0755
     - makedirs: True
 
 /usr/local/etc/qubes-rpc/qubesbuilder.ProcessGithubCommand:
-  file.managed:
-    - source: salt://build-infra/qubes-builder-github/rpc-services/qubesbuilder.ProcessGithubCommand
+  file.symlink:
+    - target: {{ last_builder_dir }}/qubes-src/builder-github/rpc-services/qubesbuilder.ProcessGithubCommand
+    - force: True
+    - mode: 0755
+    - makedirs: True
+
+/usr/local/lib/qubes-builder-github:
+  file.symlink:
+    - target: {{ last_builder_dir }}/qubes-src/builder-github/lib
+    - force: True
     - mode: 0755
     - makedirs: True
 
