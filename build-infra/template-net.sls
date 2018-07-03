@@ -2,4 +2,4 @@ webhook-dependencies:
   pkg.installed:
     - pkgs:
       - nginx
-      - python-flup
+      - python2-flup

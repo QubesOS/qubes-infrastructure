@@ -14,7 +14,8 @@ builder-dependencies:
       - wget
       - curl
       - qubes-gpg-split
-      - PyYAML
+      - python2-pyyaml
+      - python3-PyYAML
 # dpkg-scanpackages
       - perl-Digest-MD5
       - perl-Digest-SHA
