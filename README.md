@@ -214,15 +214,14 @@ Configuration tasks not included in this formula:
    - [ ] set username in `.ssh/config` for host where packages are uploaded (`yum.qubes-os.org`, `deb.qubes-os.org` etc)
    - [ ] populate `.ssh/known_hosts` for example by logging into updates server and verifying fingerprint
    - [ ] clone (and verify signed tag!) `qubes-builder` into directories listed in `~/.config/qubes-builder-github/builders.list`
-   - [ ] setup `builder.conf` in each instance, based on appropriate config in `example-configs/`. Important steps:
+   - [ ] setup `builder.conf` in each instance, based on appropriate config in `release-configs/`. In most cases it's enough to create a symlink. When creating new config, make sure to:
 
      - drop `NO_SIGN ?= 1` line
      - adjust `DISTS_VM` and `DIST_DOM0` if needed (must be set using `?=` operator)
      - adjust COMPONENTS, add builder-github there (must be set using `?=` operator, cannot use `+=`)
-     - set `SIGN_KEY` to appropriate key id (the one in maching keys VM)
+     - set `SIGN_KEY` to appropriate key id (the one in matching keys VM)
      - set `LINUX_REPO_BASEDIR` to a appropriate directory (pointing exact release version, like `$(SRC_DIR)/linux-yum/r4.0`)
      - include `$(HOME)/builder-github.conf`
-   - [ ] populate `~/.config/qubes-builder-github/trusted-keys-for-commands.gpg` keyring with keys authorized to perform repository operations
 
 3. In `build-logs` VM:
 
