@@ -90,7 +90,7 @@ echo {{qubes_master_key_fpr}}:6 | gpg --import-ownertrust:
 
 commands-keyring:
   cmd.run:
-    - name: rm -f {{ commands_keyring }}; gpg2 --no-default-keyring --keyring {{ commands_keyring }} --import /home/user/trusted-keys-for-commands.asc
+    - name: rm -f {{ commands_keyring }}; LC_ALL=C.utf8 gpg2 --no-default-keyring --keyring {{ commands_keyring }} --import /home/user/trusted-keys-for-commands.asc
     - runas: user
     - onchange:
       - file: /home/user/trusted-keys-for-commands.asc
