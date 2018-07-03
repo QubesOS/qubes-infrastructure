@@ -16,6 +16,7 @@ builder-dependencies:
       - qubes-gpg-split
       - python2-pyyaml
       - python3-PyYAML
+      - mock
 # dpkg-scanpackages
       - perl-Digest-MD5
       - perl-Digest-SHA
