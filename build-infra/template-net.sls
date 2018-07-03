@@ -3,3 +3,4 @@ webhook-dependencies:
     - pkgs:
       - nginx
       - python2-flup
+      - nmap-ncat
