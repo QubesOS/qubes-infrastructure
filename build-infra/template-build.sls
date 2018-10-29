@@ -20,6 +20,7 @@ builder-dependencies:
 # dpkg-scanpackages
       - perl-Digest-MD5
       - perl-Digest-SHA
+      - devscripts
 # for salt gpg module
       - gnupg
       - python2-gnupg
