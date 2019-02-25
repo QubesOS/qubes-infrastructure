@@ -17,6 +17,8 @@ builder-dependencies:
       - python2-pyyaml
       - python3-PyYAML
       - mock
+      - pbuilder
+      - reprepro
 # dpkg-scanpackages
       - perl-Digest-MD5
       - perl-Digest-SHA
