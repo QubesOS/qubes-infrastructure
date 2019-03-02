@@ -19,6 +19,7 @@ builder-dependencies:
       - mock
       - pbuilder
       - reprepro
+      - nosync
 # dpkg-scanpackages
       - perl-Digest-MD5
       - perl-Digest-SHA
