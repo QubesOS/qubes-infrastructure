@@ -1,10 +1,5 @@
-%{!?version: %define version %(cat version)}
-%if 0%{?qubes_builder}
-%define _builddir %(pwd)
-%endif
-
 Name:		qubes-mgmt-salt-dom0-qubes-infrastructure
-Version:	%{version}
+Version:	@VERSION@
 Release:	1%{?dist}
 Summary:	Manage Qubes OS infrastructure VMs
 
@@ -12,6 +7,7 @@ Group:		System administration tools
 License:	GPL 2.0
 BuildArch:  noarch
 URL:		https://www.qubes-os.org/
+Source:	%{name}-%{version}.tar.gz
 
 Requires:	qubes-mgmt-salt
 Requires:	qubes-mgmt-salt-dom0
@@ -20,15 +16,7 @@ Requires:	qubes-mgmt-salt-dom0
 
 
 %prep
-%if 0%{?qubes_builder}
-# we operate on the current directory, so no need to unpack anything
-# symlink is to generate useful debuginfo packages
-rm -f %{name}-%{version}
-ln -sf . %{name}-%{version}
-%setup -T -D
-%else
 %setup -q
-%endif
 
 %build
 
@@ -53,4 +41,4 @@ make install DESTDIR=%{buildroot} LIBDIR=%{_libdir} BINDIR=%{_bindir} SBINDIR=%{
 %config(noreplace) /etc/salt/minion.d/qubes-infrastructure.conf
 
 %changelog
-
+@CHANGELOG@
