@@ -1,0 +1,5 @@
+[Timer]
+OnCalendar=monthly
+
+[Install]
+WantedBy=timers.target

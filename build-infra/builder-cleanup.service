@@ -1,0 +1,4 @@
+[Service]
+ExecStart=/usr/local/bin/builder-cleanup
+User=user
+Type=oneshot

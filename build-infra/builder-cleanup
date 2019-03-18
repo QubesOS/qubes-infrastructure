@@ -1,0 +1,45 @@
+#!/bin/sh
+
+cd /home/user
+
+logfile="/home/user/builder-github-logs/cleanup-$(date +%s).log"
+exec 2>>"$logfile"
+
+rm -f builder-r*-dom0/qubes-src/linux-template-builder/rpm/noarch/*.rpm
+
+for builder in builder-r*; do
+    exec 9<$builder/builder.lock
+    flock -x 9
+    rel=${builder#builder-}
+    rel=${rel%%-*}
+    # remove temporary build files
+    rm -rf $builder/chroot-*/home/user/rpmbuild/BUILD
+    rm -rf $builder/chroot-*/home/user/qubes-src/*
+    rm -rf $builder/qubes-src/installer-qubes-os/build
+    rm -f $builder/qubes-src/installer-qubes-os/yum/*/rpm/*.rpm
+    rm -rf $builder/chroot-*/home/user/.ccache
+    sudo rm -rf $builder/chroot-*/var/cache/pungi/*
+    # remove all but latest version of a package in current and current-testing
+    # repositories
+    for repotype in current current-testing; do
+        for repo in $builder/qubes-src/linux-yum/${rel}/$repotype/*/fc*; do
+            repomanage -o $repo 2>/dev/null | xargs -r rm
+        done
+    done
+    # remove packages not linked to any repository anymore
+    find $builder/qubes-src/*/pkgs -type f -name '*.rpm' -links -3 -exec rm {} +
+    find $builder/qubes-packages-mirror-repo/* -type f -name '*.rpm' -links -3 -exec rm {} +
+    for repotype in templates-community templates-community-testing templates-itl templates-itl-testing; do
+        repomanage -o $builder/qubes-src/linux-yum/${rel}/$repotype 2>/dev/null | xargs -r rm
+    done
+    if [ -d $builder/qubes-src/linux-template-builder/rpm/noarch ]; then
+        find $builder/qubes-src/linux-template-builder/rpm/noarch -type f -name '*.rpm' -links -2 -exec rm {} +
+    fi
+    # remove "pre" iso builds
+    rm -f $builder/iso/*pre*
+    exec 9<&-
+done
+
+find builder-github-logs -type f -mtime +30 -exec rm {} +
+
+# vim: ts=4 et sw=4

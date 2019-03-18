@@ -88,6 +88,32 @@ echo {{qubes_master_key_fpr}}:6 | gpg --import-ownertrust:
     - user: user
     - mode: 0644
 
+/usr/local/bin/builder-cleanup:
+  file.managed:
+    - source: salt://build-infra/builder-cleanup
+    - mode: 0755
+
+/home/user/.config/systemd/user/builder-cleanup.service:
+  file.managed:
+    - source: salt://build-infra/builder-cleanup.service
+    - mode: 0644
+    - user: user
+    - makedirs: true
+
+/home/user/.config/systemd/user/builder-cleanup.timer:
+  file.managed:
+    - source: salt://build-infra/builder-cleanup.timer
+    - mode: 0644
+    - user: user
+    - makedirs: true
+
+/home/user/.config/systemd/user/timers.target.wants/builder-cleanup.timer:
+  file.symlink:
+    - target: ../builder-cleanup.timer
+    - force: True
+    - mode: 0755
+    - makedirs: True
+
 commands-keyring:
   cmd.run:
     - name: rm -f {{ commands_keyring }}; LC_ALL=C.utf8 gpg2 --no-default-keyring --keyring {{ commands_keyring }} --import /home/user/trusted-keys-for-commands.asc
