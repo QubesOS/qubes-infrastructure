@@ -4,7 +4,7 @@ builder-dependencies:
       - dpkg-dev
       - debootstrap
       - git
-      - createrepo
+      - createrepo_c
       - rpm-build
       - rpm-sign
       - make
@@ -15,7 +15,7 @@ builder-dependencies:
       - curl
       - qubes-gpg-split
       - python2-pyyaml
-      - python3-PyYAML
+      - python3-pyyaml
       - mock
       - pbuilder
       - reprepro

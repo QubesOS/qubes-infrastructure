@@ -31,6 +31,8 @@ echo {{build_log_key_fpr}}:6 | gpg --import-ownertrust:
     - mode: 600
     - user: user
     - group: user
+    - makedirs: True
+    - dir_mode: 700
 
 github.com:
   ssh_known_hosts.present:
