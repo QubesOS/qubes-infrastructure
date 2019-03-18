@@ -1,0 +1,2 @@
+[Service]
+ExecStart={{builder_dir}}/qubes-src/builder-github/upload-release-status

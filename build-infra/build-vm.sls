@@ -114,6 +114,30 @@ echo {{qubes_master_key_fpr}}:6 | gpg --import-ownertrust:
     - mode: 0755
     - makedirs: True
 
+/home/user/.config/systemd/user/upload-release-status.service:
+  file.managed:
+    - source: salt://build-infra/upload-release-status.service
+    - mode: 0644
+    - user: user
+    - makedirs: true
+    - template: jinja
+    - context:
+        builder_dir: {{last_builder_dir}}
+
+/home/user/.config/systemd/user/upload-release-status.timer:
+  file.managed:
+    - source: salt://build-infra/upload-release-status.timer
+    - mode: 0644
+    - user: user
+    - makedirs: true
+
+/home/user/.config/systemd/user/timers.target.wants/upload-release-status.timer:
+  file.symlink:
+    - target: ../upload-release-status.timer
+    - force: True
+    - mode: 0755
+    - makedirs: True
+
 commands-keyring:
   cmd.run:
     - name: rm -f {{ commands_keyring }}; LC_ALL=C.utf8 gpg2 --no-default-keyring --keyring {{ commands_keyring }} --import /home/user/trusted-keys-for-commands.asc
