@@ -7,11 +7,11 @@ build-infra:
     - centos
     - debian
 # Default NetVMs and templates:
-#  logs-template: fedora-26
+#  logs-template: fedora-29
 #  logs-netvm: sys-firewall
-#  build-template: fedora-26
+#  build-template: fedora-29
 #  build-netvm: sys-whonix
-#  keys-template: fedora-26-minimal
+#  keys-template: fedora-29-minimal
 
 # builders in build VMs - this is just example, should be specified per-target
 # VM
