@@ -29,3 +29,6 @@ builder-dependencies:
       - python2-gnupg
 # for release ISO process
       - mktorrent
+# for kernel config
+      - flex
+      - bison
