@@ -25,7 +25,7 @@ builder-dependencies:
       - perl-Digest-SHA
       - devscripts
 # for salt gpg module
-      - gnupg
+      - gnupg2
       - python2-gnupg
 # for release ISO process
       - mktorrent
