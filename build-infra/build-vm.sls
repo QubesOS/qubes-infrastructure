@@ -144,3 +144,23 @@ commands-keyring:
     - runas: user
     - onchange:
       - file: /home/user/trusted-keys-for-commands.asc
+
+/home/user/.ssh/config:
+  file.managed:
+    - contents: |
+{% for host, config in salt['pillar.get']('build-infra:remote-hosts', {}).items() %}
+        Host {{host}}
+          HostName {{host}}
+          User {{config.ssh_user}}
+{% endfor %}
+    - mode: 0755
+    - makedirs: True
+
+{% for host, config in salt['pillar.get']('build-infra:remote-hosts', {}).items() %}
+{{host}}:
+  ssh_known_hosts.present:
+    - user: user
+    - enc: ssh-rsa
+    - key: {{config.ssh_host_key}}
+    - hash_known_hosts: False
+{% endfor %}
