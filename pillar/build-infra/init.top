@@ -3,6 +3,11 @@ base:
     - build-infra
   build-logs:
     - build-infra.build-logs
-# enable this for all build VMs
-# not possible to list them automatically, as grains not loaded yet
-#   - build-infra.build-vms
+  build-fedora1:
+    - build-infra.build-vms
+  build-fedora2:
+    - build-infra.build-vms
+  build-centos1:
+    - build-infra.build-vms
+  build-debian1:
+    - build-infra.build-vms

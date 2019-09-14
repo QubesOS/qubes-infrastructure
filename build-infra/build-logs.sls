@@ -1,4 +1,7 @@
-{% set build_log_key_fpr = '1B760CED53D8EB5AE529BEBB16D7539A228D30DB' %}
+{% set build_log_key_fpr = salt('pillar.get')('build-infra:build_log_key_fpr', '1B760CED53D8EB5AE529BEBB16D7539A228D30DB') %}
+{% set build_log_repo = salt('pillar.get')('build-infra:build_log_repo', 'git@github.com:QubesOS/build-logs') %}
+{% set build_bot_name = salt('pillar.get')('build-infra:build_bot_name', 'Qubes OS build bot') %}
+{% set build_bot_email = salt('pillar.get')('build-infra:build_bot_email', 'builder-bot@qubes-os.org') %}
 
 # logs signing key, secret key is needed too (not configured through salt)
 {{build_log_key_fpr}}:
@@ -22,7 +25,7 @@
 echo {{build_log_key_fpr}}:6 | gpg --import-ownertrust:
   cmd.run:
     - runas: user
-    - requires:
+    - require:
       - gpg: {{build_log_key_fpr}}
 
 /home/user/.ssh/id_rsa:
@@ -42,7 +45,7 @@ github.com:
 # Disable for now because of Salt bug 37948
     - hash_known_hosts: False
 
-'git@github.com:QubesOS/build-logs':
+{{build_log_repo}}:
   git.latest:
     - target: /home/user/QubesIncomingBuildLog
     - user: user
@@ -52,8 +55,8 @@ git verify-commit --raw HEAD 2>&1 >/dev/null | grep '^\[GNUPG:\] TRUST_ULTIMATE'
   cmd.run:
     - cwd: /home/user/QubesIncomingBuildLog
     - runas: user
-    - requires:
-      - git: 'git@github.com:QubesOS/build-logs'
+    - require:
+      - git: {{build_log_repo}}
       - gpg: {{build_log_key_fpr}}
 
 /usr/local/etc/qubes-rpc/qubesbuilder.BuildLog:
@@ -64,8 +67,8 @@ git verify-commit --raw HEAD 2>&1 >/dev/null | grep '^\[GNUPG:\] TRUST_ULTIMATE'
 
 
 {% load_yaml as git_config -%}
-user.name: Qubes OS build bot
-user.email: builder-bot@qubes-os.org
+user.name: {{build_bot_name}}
+user.email: {{build_bot_email}}
 user.signingkey: {{build_log_key_fpr}}
 commit.gpgsign: true
 gpg.program: gpg2

@@ -13,7 +13,7 @@
 /home/user/.config/qubes-builder-github/build-vms.list:
   file.managed:
     - contents:
-{%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
+{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
        - build-{{env}}
 {% endfor %}
     - mode: 0644

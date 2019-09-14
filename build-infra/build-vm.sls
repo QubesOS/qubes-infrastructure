@@ -1,6 +1,9 @@
 {% set qubes_master_key_fpr = '427F11FD0FAA4B080123F01CDDFA1A3E36879494' %}
 {% set commands_keyring = '/home/user/.config/qubes-builder-github/trusted-keys-for-commands.gpg' %}
-{% set last_builder_dir = (salt['pillar.get']('build-infra:builders-list').splitlines()|last).split('=')|last %}
+
+{% set env = grains['id']|replace('build-','') %}
+{% set builders_list = salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list').keys() %}
+{% set last_builder_dir = builders_list|last %}
 
 /usr/local/etc/qubes-rpc/qubesbuilder.CopyTemplateBack:
   file.symlink:
@@ -34,7 +37,10 @@
   file.managed:
     - mode: 0644
     - user: user
-    - contents_pillar: build-infra:builders-list
+    - contents: |
+{% for builder in builders_list %}
+        r{{ salt['pillar.get']('build-infra:build-envs:'+ env + ':builders-list:' + builder + ':release') }}={{ builder }}
+{% endfor %}
     - makedirs: True
 
 /rw/config/gpg-split-domain:
@@ -63,11 +69,26 @@ gpg --import /home/user/qubes-master-key.asc:
     - onchange:
       - file: /home/user/qubes-master-key.asc
 
+{{qubes_master_key_fpr}}:
+  gpg.present:
+    - user: user
+
 echo {{qubes_master_key_fpr}}:6 | gpg --import-ownertrust:
   cmd.run:
     - runas: user
-    - requires:
+    - require:
       - gpg: {{qubes_master_key_fpr}}
+
+/home/user/qubes-developers-keys.asc:
+  file.managed:
+    - source: salt://build-infra/qubes-builder/qubes-developers-keys.asc
+    - user: user
+
+gpg --import /home/user/qubes-developers-keys.asc:
+  cmd.run:
+    - runas: user
+    - onchange:
+      - file: /home/user/qubes-developers-keys.asc
 
 /home/user/builder-github.conf:
   file.managed:
@@ -163,4 +184,54 @@ commands-keyring:
     - enc: ssh-rsa
     - key: {{config.ssh_host_key}}
     - hash_known_hosts: False
+{% endfor %}
+
+github.com:
+  ssh_known_hosts.present:
+    - user: user
+    - enc: ssh-rsa
+    - key: AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+    - hash_known_hosts: False
+
+# bootstrap configuration for getting release-configs
+/home/user/bootstrap.conf:
+  file.managed:
+    - source: salt://build-infra/bootstrap.conf
+    - mode: 0755
+
+{% for builder in builders_list %}
+{% set release =  salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':release') %}
+{% set config =  salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':config') %}
+{{builder}}-get:
+  git.latest:
+    - name : https://github.com/QubesOS/qubes-builder
+    - target: {{ builder }}
+    - user: user
+
+{{builder}}-check:
+  cmd.run:
+    - name: git verify-tag --raw "$(git describe --abbrev=0)" 2>&1 >/dev/null | grep '^\[GNUPG:\] TRUST_FULLY'
+    - cwd: {{ builder }}
+    - runas: user
+    - require:
+      - git: {{builder}}-get
+      - gpg: {{qubes_master_key_fpr}}
+
+{{builder}}-release-configs:
+  cmd.run:
+    - name: BUILDERCONF=/home/user/bootstrap.conf make get-sources
+    - cwd: {{ builder }}
+    - runas: user
+    - require:
+      - file: /home/user/bootstrap.conf
+      - cmd: {{builder}}-check
+
+{{ builder }}/builder.conf:
+  file.symlink:
+    - target: {{ builder }}/qubes-src/release-configs/R{{release}}/{{ config }}
+    - force: True
+    - mode: 0775
+    - makedirs: True
+    - require:
+      - cmd: {{builder}}-release-configs
 {% endfor %}

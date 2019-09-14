@@ -1,11 +1,6 @@
 
 
 build-infra:
-# list of build environments:
-  build-envs:
-    - fedora
-    - centos
-    - debian
 # Default NetVMs and templates:
 #  logs-template: fedora-30
 #  logs-netvm: sys-firewall
@@ -13,11 +8,55 @@ build-infra:
 #  build-netvm: sys-whonix
 #  keys-template: fedora-30-minimal
 
-# builders in build VMs - this is just example, should be specified per-target
-# VM
-  builders-list: |
-      r4.0=/home/user/builder-r4.0
-      r4.1=/home/user/builder-r4.1
+# example list of build environments:
+  build-envs:
+    fedora1:
+      builders-list:
+        /home/user/builder-r4.0:
+          release: 4.0
+          config: qubes-os-r4.0-dom0.conf
+        /home/user/builder-r4.1:
+          release: 4.1
+          config: qubes-os-r4.1-dom0.conf
+      volume-size: 20GiB
+    fedora2:
+      builders-list:
+        /home/user/builder-r4.0:
+          release: 4.0
+          config: qubes-os-r4.0-fedora.conf
+        /home/user/builder-r4.1:
+          release: 4.1
+          config: qubes-os-r4.1-fedora.conf
+      volume-size: 20GiB
+    centos1:
+      builders-list:
+        /home/user/builder-r4.0:
+          release: 4.0
+          config: qubes-os-r4.0-centos.conf
+        /home/user/builder-r4.1:
+          release: 4.1
+          config: qubes-os-r4.1-centos.conf
+      volume-size: 20GiB
+    debian1:
+      builders-list:
+        /home/user/builder-r4.0:
+          release: 4.0
+          config: qubes-os-r4.0-debian.conf
+        /home/user/builder-r4.1:
+          release: 4.1
+          config: qubes-os-r4.1-debian.conf
+      volume-size: 20GiB
+
+# Above definitions of environments can be put in
+# separate pillar files. Just ensure to keep at least
+# the env names for init.top
+#   build-envs:
+#     fedora1
+#     fedora2
+#     centos1
+#     debian1
+
+# list of remote hosts used to push packages
   remote-hosts:
     yum.qubes-os.org:
         ssh_user: user

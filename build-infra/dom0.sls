@@ -9,7 +9,7 @@ build-logs:
 /etc/qubes-rpc/policy/qubes.Gpg:
   file.prepend:
     - text:
-{%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
+{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
       - build-{{env}} keys-{{env}} allow
       - $anyvm keys-{{env}} deny
 {% endfor %}
@@ -17,7 +17,7 @@ build-logs:
 
 ### This block is executed for each build environment
 
-{% for env in salt['pillar.get']('build-infra:build-envs', []) %}
+{% for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
 
 build-{{env}}:
   qvm.vm:
@@ -26,6 +26,12 @@ build-{{env}}:
     - prefs:
       - template: {{ salt['pillar.get']('build-infra:build-template', 'fedora-30') }}
       - netvm: {{ salt['pillar.get']('build-infra:build-netvm', 'sys-whonix') }}
+
+{% if salt['pillar.get']('build-infra:build-envs:' + env + ':volume-size') %}
+volume-{{env}}:
+  cmd.run:
+    - name: 'qvm-volume extend build-{{env}}:private {{salt['pillar.get']('build-infra:build-envs:' + env + ':volume-size')}}'
+{% endif %}
 
 keys-{{env}}:
   qvm.vm:
@@ -47,7 +53,7 @@ keys-{{env}}:
 /etc/qubes-rpc/policy/qubesbuilder.BuildLog:
   file.managed:
     - contents:
-{%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
+{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
       - build-{{env}} dom0 allow,target=build-logs
 {% endfor %}
 
@@ -74,7 +80,7 @@ keys-{{env}}:
     - mode: 0664
     - makedirs: True
     - contents:
-{%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
+{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
       - build-{{env}} dom0 allow
 {% endfor %}
 
@@ -83,6 +89,6 @@ keys-{{env}}:
     - mode: 0664
     - makedirs: True
     - contents:
-{%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
+{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
       - $anyvm build-{{env}} allow
 {% endfor %}

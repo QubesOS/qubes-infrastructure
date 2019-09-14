@@ -7,7 +7,7 @@ base:
     - build-infra.template-keys
   build-logs:
     - build-infra.build-logs
-{%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
+{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
   keys-{{env}}:
     - build-infra.keys-vm
   build-{{env}}:

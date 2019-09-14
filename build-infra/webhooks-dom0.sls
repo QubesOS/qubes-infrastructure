@@ -1,7 +1,7 @@
 /etc/qubes-rpc/policy/qubesbuilder.TriggerBuild:
   file.managed:
     - contents:
-{%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
+{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
        - sys-net build-{{env}} allow
 {% endfor %}
     - group: qubes
@@ -10,7 +10,7 @@
 /etc/qubes-rpc/policy/qubesbuilder.ProcessGithubCommand:
   file.managed:
     - contents:
-{%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
+{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
        - sys-net build-{{env}} allow
 {% endfor %}
     - group: qubes

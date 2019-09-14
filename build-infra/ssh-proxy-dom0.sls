@@ -2,7 +2,7 @@
 /etc/qubes-rpc/policy/local.ConnectSSH+{{host}}:
   file.managed:
     - contents:
-{%- for env in salt['pillar.get']('build-infra:build-envs', []) %}
+{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
         - build-{{env}} sys-net allow
 {% endfor %}
 
