@@ -13,38 +13,38 @@ build-infra:
     fedora1:
       builders-list:
         /home/user/builder-r4.0:
+          keys:
+            - 9FA64B92F95E706BF28E2CA6484010B5CDC576E2
           release: 4.0
-          config: qubes-os-r4.0-dom0.conf
+          config:
+            - file: R4.0/qubes-os-r4.0-dom0.conf
+            - repository:
+                - baseurl: https://github.com/QubesOS-contrib/qubes-
+                - component: contrib-configs
         /home/user/builder-r4.1:
           release: 4.1
-          config: qubes-os-r4.1-dom0.conf
+          config: 
+            - file: R4.1/qubes-os-r4.1-dom0.conf
+            - repository: 
+                - baseurl: https://github.com/QubesOS/qubes-
+                - component: release-configs
       volume-size: 20GiB
     fedora2:
       builders-list:
         /home/user/builder-r4.0:
           release: 4.0
-          config: qubes-os-r4.0-fedora.conf
+          config: 
+            - file: R4.0/qubes-os-r4.0-fedora.conf
+            - repository: 
+                - baseurl: https://github.com/QubesOS/qubes-
+                - component: release-configs
         /home/user/builder-r4.1:
           release: 4.1
-          config: qubes-os-r4.1-fedora.conf
-      volume-size: 20GiB
-    centos1:
-      builders-list:
-        /home/user/builder-r4.0:
-          release: 4.0
-          config: qubes-os-r4.0-centos.conf
-        /home/user/builder-r4.1:
-          release: 4.1
-          config: qubes-os-r4.1-centos.conf
-      volume-size: 20GiB
-    debian1:
-      builders-list:
-        /home/user/builder-r4.0:
-          release: 4.0
-          config: qubes-os-r4.0-debian.conf
-        /home/user/builder-r4.1:
-          release: 4.1
-          config: qubes-os-r4.1-debian.conf
+          config: 
+            - file: R4.1/qubes-os-r4.1-fedora.conf
+            - repository: 
+                - baseurl: https://github.com/QubesOS/qubes-
+                - component: release-configs
       volume-size: 20GiB
 
 # Above definitions of environments can be put in
@@ -53,8 +53,6 @@ build-infra:
 #   build-envs:
 #     fedora1
 #     fedora2
-#     centos1
-#     debian1
 
 # list of remote hosts used to push packages
   remote-hosts:

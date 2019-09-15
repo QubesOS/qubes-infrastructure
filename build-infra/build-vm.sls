@@ -193,15 +193,12 @@ github.com:
     - key: AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
     - hash_known_hosts: False
 
-# bootstrap configuration for getting release-configs
-/home/user/bootstrap.conf:
-  file.managed:
-    - source: salt://build-infra/bootstrap.conf
-    - mode: 0755
-
 {% for builder in builders_list %}
-{% set release =  salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':release') %}
-{% set config =  salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':config') %}
+{% set config_baseurl = salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':config:repository:baseurl', 'https://github.com/QubesOS/qubes-') %}
+{% set config_repo = salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':config:repository:component', 'release-configs') %}
+{% set config_file = salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':config:file') %}
+{% set keys =  salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':keys', []) %}
+
 {{builder}}-get:
   git.latest:
     - name : https://github.com/QubesOS/qubes-builder
@@ -217,21 +214,47 @@ github.com:
       - git: {{builder}}-get
       - gpg: {{qubes_master_key_fpr}}
 
-{{builder}}-release-configs:
+{{builder}}-init:
   cmd.run:
-    - name: BUILDERCONF=/home/user/bootstrap.conf make get-sources
+    - name: "BUILDERCONF= GIT_URL_builder=https://github.com/QubesOS/qubes-builder COMPONENTS=builder make get-sources"
     - cwd: {{ builder }}
     - runas: user
     - require:
-      - file: /home/user/bootstrap.conf
       - cmd: {{builder}}-check
 
+{% for key in keys %}
+{{builder}}-{{key}}:
+  file.managed:
+    - name: /home/user/{{key}}
+    - source: salt://build-infra/keys/{{key}}
+    - user: user
+
+{{builder}}-{{key}}-import:
+  cmd.run:
+    - name:  export GNUPGHOME="$(make get-var GET_VAR=KEYRING_DIR_GIT)"; scripts/verify-git-tag; gpg --import /home/user/{{key}} || exit 1; echo '{{key}}:6:' | gpg --import-ownertrust
+    - cwd: {{ builder }}
+    - runas: user
+    - require:
+      - cmd: {{builder}}-init
+      - file: {{builder}}-{{key}}
+{% endfor %}
+
+{{builder}}-configs:
+  cmd.run:
+    - name: "BUILDERCONF= COMPONENTS={{ config_repo }} GIT_URL_{{ config_repo|replace('-', '_') }}={{ config_baseurl }}{{ config_repo }} make get-sources"
+    - cwd: {{ builder }}
+    - runas: user
+    - require:
+      - cmd: {{builder}}-check
+
+{% if config_file %}
 {{ builder }}/builder.conf:
   file.symlink:
-    - target: {{ builder }}/qubes-src/release-configs/R{{release}}/{{ config }}
+    - target: {{ builder }}/qubes-src/{{ config_repo }}/{{ config_file }}
     - force: True
     - mode: 0775
     - makedirs: True
     - require:
-      - cmd: {{builder}}-release-configs
+      - cmd: {{builder}}-configs
+{% endif %}
 {% endfor %}
