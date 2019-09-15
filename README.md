@@ -211,10 +211,8 @@ Configuration tasks not included in this formula:
 2. In each build VM:
 
    - [ ] generate/import ssh key used to upload packages
-   - [ ] set username in `.ssh/config` for host where packages are uploaded (`yum.qubes-os.org`, `deb.qubes-os.org` etc)
-   - [ ] populate `.ssh/known_hosts` for example by logging into updates server and verifying fingerprint
-   - [ ] clone (and verify signed tag!) `qubes-builder` into directories listed in `~/.config/qubes-builder-github/builders.list`
-   - [ ] setup `builder.conf` in each instance, based on appropriate config in `release-configs/`. In most cases it's enough to create a symlink. When creating new config, make sure to:
+
+   - For any config `builder.conf` used, make sure to:
 
      - drop `NO_SIGN ?= 1` line
      - adjust `DISTS_VM` and `DIST_DOM0` if needed (must be set using `?=` operator)
@@ -228,4 +226,4 @@ Configuration tasks not included in this formula:
   - [ ] generate/import ssh key, add it to QubesOS/build-logs repository as deploy key with write access
   - [ ] import logs signing key
 
-4. Make sure build VMs are large enough.
+4. Make sure build VMs are large enough if not specified in `pillar` data.
