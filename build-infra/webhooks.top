@@ -1,6 +1,6 @@
 base:
-  # assume sys-net is on fedora-29 template
-  fedora-29:
+  # assume sys-net is on fedora-30 template
+  fedora-30:
     - build-infra.template-net
   sys-net:
     - build-infra.webhooks-base
