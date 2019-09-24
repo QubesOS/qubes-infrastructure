@@ -4,6 +4,17 @@
 {% set build_bot_email = salt['pillar.get']('build-infra:build_bot_email', 'builder-bot@qubes-os.org') %}
 
 # logs signing key, secret key is needed too (not configured through salt)
+/home/user/qubes-build-log-key.asc:
+  file.managed:
+    - contents_pillar: build-infra:build_log_public_key
+    - user: user
+
+gpg --import /home/user/qubes-build-log-key.asc:
+  cmd.run:
+    - runas: user
+    - onchange:
+      - file: /home/user/qubes-build-log-key.asc
+
 {{build_log_key_fpr}}:
   gpg.present:
     - user: user
@@ -64,7 +75,6 @@ git verify-commit --raw HEAD 2>&1 >/dev/null | grep '^\[GNUPG:\] TRUST_ULTIMATE'
     - source: salt://build-infra/qubes-builder/rpc-services/qubesbuilder.BuildLog
     - mode: 0775
     - makedirs: True
-
 
 {% load_yaml as git_config -%}
 user.name: {{build_bot_name}}

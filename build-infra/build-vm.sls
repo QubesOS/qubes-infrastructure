@@ -226,7 +226,7 @@ github.com:
 {% for key in keys %}
 {{builder}}-{{key}}-import:
   cmd.run:
-    - name:  export GNUPGHOME="$(make get-var GET_VAR=KEYRING_DIR_GIT)"; gpg --import {{builder}}/keys/{{key}} || exit 1; echo '{{key}}:6:' | gpg --import-ownertrust
+    - name:  export GNUPGHOME="$(make get-var GET_VAR=KEYRING_DIR_GIT)"; gpg --import {{builder}}/keys/{{key}}.asc || exit 1; echo '{{key}}:6:' | gpg --import-ownertrust
     - cwd: {{ builder }}
     - runas: user
     - require:
