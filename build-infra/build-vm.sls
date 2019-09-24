@@ -168,6 +168,7 @@ commands-keyring:
 
 /home/user/.ssh/config:
   file.managed:
+    - user: user
     - contents: |
 {% for host, config in salt['pillar.get']('build-infra:remote-hosts', {}).items() %}
         Host {{host}}
@@ -223,20 +224,13 @@ github.com:
       - cmd: {{builder}}-check
 
 {% for key in keys %}
-{{builder}}-{{key}}:
-  file.managed:
-    - name: /home/user/{{key}}
-    - source: salt://build-infra/keys/{{key}}
-    - user: user
-
 {{builder}}-{{key}}-import:
   cmd.run:
-    - name:  export GNUPGHOME="$(make get-var GET_VAR=KEYRING_DIR_GIT)"; scripts/verify-git-tag; gpg --import /home/user/{{key}} || exit 1; echo '{{key}}:6:' | gpg --import-ownertrust
+    - name:  export GNUPGHOME="$(make get-var GET_VAR=KEYRING_DIR_GIT)"; gpg --import {{builder}}/keys/{{key}} || exit 1; echo '{{key}}:6:' | gpg --import-ownertrust
     - cwd: {{ builder }}
     - runas: user
     - require:
       - cmd: {{builder}}-init
-      - file: {{builder}}-{{key}}
 {% endfor %}
 
 {{builder}}-configs:

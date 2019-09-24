@@ -51,8 +51,8 @@ build-infra:
 # separate pillar files. Just ensure to keep at least
 # the env names for init.top
 #   build-envs:
-#     fedora1
-#     fedora2
+#     fedora1: {}
+#     fedora2: {}
 
 # list of remote hosts used to push packages
   remote-hosts:

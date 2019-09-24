@@ -27,6 +27,7 @@ builder-dependencies:
 # for salt gpg module
       - gnupg2
       - python2-gnupg
+      - python3-gnupg
 # for release ISO process
       - mktorrent
 # for kernel config
