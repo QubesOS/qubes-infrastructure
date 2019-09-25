@@ -250,5 +250,13 @@ github.com:
     - makedirs: True
     - require:
       - cmd: {{builder}}-configs
+
+{{builder}}-get-sources:
+  cmd.run:
+    - name: "make get-sources"
+    - cwd: {{ builder }}
+    - runas: user
+    - require:
+      - file: {{ builder }}/builder.conf
 {% endif %}
 {% endfor %}
