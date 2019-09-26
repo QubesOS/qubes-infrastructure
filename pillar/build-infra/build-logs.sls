@@ -8,6 +8,6 @@ build-infra:
     -----END PGP PUBLIC KEY BLOCK-----
 # ssh key used to access github - needs to have write access to build-logs repository
   github_ssh_key: |
-    -----BEGIN RSA PRIVATE KEY-----
+    -----BEGIN OPENSSH PRIVATE KEY-----
     ...
-    -----END RSA PRIVATE KEY-----
+    -----END OPENSSH PRIVATE KEY-----
