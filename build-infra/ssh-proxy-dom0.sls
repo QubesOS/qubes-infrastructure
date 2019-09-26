@@ -1,4 +1,4 @@
-{% for host in ['github.com', 'yum.qubes-os.org', 'deb.qubes-os.org'] %}
+{% for host in ['github.com', 'yum.qubes-os.org', 'deb.qubes-os.org', 'contrib.qubes-os.org'] %}
 /etc/qubes-rpc/policy/local.ConnectSSH+{{host}}:
   file.managed:
     - contents:
