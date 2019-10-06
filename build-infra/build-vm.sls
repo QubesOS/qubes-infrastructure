@@ -219,7 +219,7 @@ github.com:
 
 {{builder}}-check:
   cmd.run:
-    - name: git verify-tag --raw "$(git describe --abbrev=0)" 2>&1 >/dev/null | grep '^\[GNUPG:\] TRUST_FULLY'
+    - name: git verify-tag --raw "$(git describe)" 2>&1 >/dev/null | grep '^\[GNUPG:\] TRUST_FULLY'
     - cwd: {{ builder }}
     - runas: user
     - require:

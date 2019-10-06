@@ -23,9 +23,9 @@ build-infra:
                 - component: contrib-configs
         /home/user/builder-r4.1:
           release: 4.1
-          config: 
+          config:
             - file: R4.1/qubes-os-r4.1-dom0.conf
-            - repository: 
+            - repository:
                 - baseurl: https://github.com/QubesOS/qubes-
                 - component: release-configs
       volume-size: 20GiB
@@ -33,16 +33,16 @@ build-infra:
       builders-list:
         /home/user/builder-r4.0:
           release: 4.0
-          config: 
+          config:
             - file: R4.0/qubes-os-r4.0-fedora.conf
-            - repository: 
+            - repository:
                 - baseurl: https://github.com/QubesOS/qubes-
                 - component: release-configs
         /home/user/builder-r4.1:
           release: 4.1
-          config: 
+          config:
             - file: R4.1/qubes-os-r4.1-fedora.conf
-            - repository: 
+            - repository:
                 - baseurl: https://github.com/QubesOS/qubes-
                 - component: release-configs
       volume-size: 20GiB
