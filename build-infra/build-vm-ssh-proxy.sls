@@ -1,4 +1,4 @@
-/home/user/.ssh/config:
+/home/user/.ssh/config-ssh-proxy:
   file.append:
     - makedirs: True
     - text: |
