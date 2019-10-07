@@ -2,7 +2,7 @@
 
 package-name:   qubes-mgmt-salt-dom0-qubes-infrastructure
 saltenv:        base
-version:        2.0.0
+version:        2.0.1
 release:        1
 name:           qubes-infrastructure
 top_level_dir:  build-infra
