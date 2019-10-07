@@ -1,5 +1,6 @@
 /home/user/.ssh/config-ssh-proxy:
   file.append:
+    - name: /home/user/.ssh/config
     - makedirs: True
     - text: |
         Host *

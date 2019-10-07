@@ -38,9 +38,9 @@
     - mode: 0644
     - user: user
     - contents: |
-{% for builder in builders_list -%}
+{%- for builder in builders_list %}
         r{{ salt['pillar.get']('build-infra:build-envs:'+ env + ':builders-list:' + builder + ':release') }}={{ builder }}
-{% endfor -%}
+{%- endfor %}
     - makedirs: True
 
 /rw/config/gpg-split-domain:
