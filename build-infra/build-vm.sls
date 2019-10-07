@@ -73,7 +73,7 @@ gpg --import /home/user/qubes-master-key.asc:
   gpg.present:
     - user: user
 
-echo {{qubes_master_key_fpr}}:6 | gpg --import-ownertrust:
+echo {{qubes_master_key_fpr}}:6 | gpg --import-ownertrust && gpg --check-trustdb:
   cmd.run:
     - runas: user
     - require:
@@ -161,7 +161,7 @@ gpg --import /home/user/qubes-developers-keys.asc:
 
 commands-keyring:
   cmd.run:
-    - name: rm -f {{ commands_keyring }}; LC_ALL=C.utf8 gpg2 --no-default-keyring --keyring {{ commands_keyring }} --import /home/user/trusted-keys-for-commands.asc
+    - name: rm -f {{ commands_keyring }}; LC_ALL=C.utf8 gpg2 --dearmor > {{ commands_keyring }} < /home/user/trusted-keys-for-commands.asc
     - runas: user
     - onchange:
       - file: /home/user/trusted-keys-for-commands.asc
