@@ -12,6 +12,9 @@ Source:	%{name}-%{version}.tar.gz
 Requires:	qubes-mgmt-salt
 Requires:	qubes-mgmt-salt-dom0
 
+# Turn off automatic python bytecompilation
+%undefine py_auto_byte_compile
+
 %description
 
 
