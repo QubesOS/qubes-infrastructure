@@ -28,7 +28,9 @@ for builder in builder-r*; do
     done
     # remove packages not linked to any repository anymore
     find $builder/qubes-src/*/pkgs -type f -name '*.rpm' -links -3 -exec rm {} +
-    find $builder/qubes-packages-mirror-repo/* -type f -name '*.rpm' -links -3 -exec rm {} +
+    for repo in $builder/qubes-packages-mirror-repo/*; do
+        repomanage -o $repo 2>/dev/null | xargs -r rm
+    done
     for repotype in templates-community templates-community-testing templates-itl templates-itl-testing; do
         repomanage -o $builder/qubes-src/linux-yum/${rel}/$repotype 2>/dev/null | xargs -r rm
     done
