@@ -64,6 +64,25 @@ connection directly. `local.ConnectSSH` service is implemented as simple netcat.
         qubesctl --all state.highstate
 
 
+`build-infra.webhooks` formula
+--------------------------------
+
+Configure a web server (Nginx) in `sys-net` to receive github webhooks. The web
+server receives `push event` at the location `/github-hooks/` with content
+type `application/json`. For triggering build from github, configure
+the payload URL to be `http://IPADDRESS/github-hooks/trigger-build` and for processing
+github comments, configure payload URL to be `http://IPADDRESS/github-hooks/process-comment`.
+
+### Usage:
+
+1. Enable this formula:
+
+        qubesctl top.enable build-infra.webhooks
+
+2. Apply the configuration:
+
+        qubesctl --all state.highstate
+
 
 Detailed description of the infrastructure
 ==========================================
