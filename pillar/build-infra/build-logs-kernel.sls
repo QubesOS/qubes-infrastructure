@@ -5,7 +5,7 @@ build-infra:
   build_logs_repo: fepitre-bot/build-logs-kernel
 # public gpg key associated to the one used to sign log commits
 # it allows to not rely on gpg key servers
-  build_log_public_key: |
+  build_logs_repo_public_key: |
     -----BEGIN PGP PUBLIC KEY BLOCK-----
     ...
     -----END PGP PUBLIC KEY BLOCK-----
