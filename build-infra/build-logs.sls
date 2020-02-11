@@ -1,5 +1,5 @@
 {% set build_logs_key_fpr = salt['pillar.get']('build-infra:build_logs_key_fpr', '1B760CED53D8EB5AE529BEBB16D7539A228D30DB') %}
-{% set build_logs_repo = salt['pillar.get']('build-infra:build_logs_repo', 'git@github.com:QubesOS/build-logs') %}
+{% set build_logs_repo_url = 'git@github.com:' + salt['pillar.get']('build-infra:build_logs_repo', 'QubesOS/build-logs') %}
 {% set build_bot_name = salt['pillar.get']('build-infra:build_bot_name', 'Qubes OS build bot') %}
 {% set build_bot_email = salt['pillar.get']('build-infra:build_bot_email', 'builder-bot@qubes-os.org') %}
 
@@ -56,7 +56,7 @@ github.com:
 # Disable for now because of Salt bug 37948
     - hash_known_hosts: False
 
-{{build_logs_repo}}:
+{{build_logs_repo_url}}:
   git.latest:
     - target: /home/user/QubesIncomingBuildLog
     - user: user
