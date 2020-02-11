@@ -1,22 +1,15 @@
-build-logs:
+### This block is executed for each logs environment
+{%- for log in salt['pillar.get']('build-infra:build-envs', {}).values()|list|map(attribute='logs')|unique|list %}
+build-{{log}}:
   qvm.vm:
     - present:
       - label: green
     - prefs:
       - template: {{ salt['pillar.get']('build-infra:logs-template', 'fedora-30') }}
       - netvm: {{ salt['pillar.get']('build-infra:logs-netvm', 'sys-firewall') }}
-
-/etc/qubes-rpc/policy/qubes.Gpg:
-  file.prepend:
-    - text:
-{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
-      - build-{{env}} keys-{{env}} allow
-      - $anyvm keys-{{env}} deny
-{% endfor %}
-
+{%- endfor %}
 
 ### This block is executed for each build environment
-
 {% for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
 
 build-{{env}}:
@@ -44,17 +37,25 @@ keys-{{env}}:
 /etc/qubes-rpc/policy/qubesbuilder.LogReceived+build-{{env}}:
   file.managed:
     - contents:
-      - build-logs dom0 allow,target=keys-{{env}}
+      - build-{{salt['pillar.get']('build-infra:build-envs:' + env + ':logs')}} dom0 allow,target=keys-{{env}}
 
 {% endfor %}
 
 ###
 
+/etc/qubes-rpc/policy/qubes.Gpg:
+  file.prepend:
+    - text:
+{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
+      - build-{{env}} keys-{{env}} allow
+      - $anyvm keys-{{env}} deny
+{% endfor %}
+
 /etc/qubes-rpc/policy/qubesbuilder.BuildLog:
   file.managed:
     - contents:
 {%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
-      - build-{{env}} dom0 allow,target=build-logs
+      - build-{{env}} dom0 allow,target=build-{{salt['pillar.get']('build-infra:build-envs:' + env + ':logs')}}
 {% endfor %}
 
 /etc/qubes-rpc/qubesbuilder.ExportDisk:

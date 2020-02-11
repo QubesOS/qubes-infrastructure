@@ -29,6 +29,7 @@ build-infra:
                 - baseurl: https://github.com/QubesOS/qubes-
                 - component: release-configs
       volume-size: 20GiB
+      logs: logs
     fedora2:
       builders-list:
         /home/user/builder-r4.0:
@@ -46,6 +47,29 @@ build-infra:
                 - baseurl: https://github.com/QubesOS/qubes-
                 - component: release-configs
       volume-size: 20GiB
+      logs: logs
+    kernel:
+      builders-list:
+        /home/user/builder-r4.1-master:
+          keys:
+            - 9FA64B92F95E706BF28E2CA6484010B5CDC576E2
+          release: 4.1
+          config:
+            - file: qubes-os-r4.1-kernel-master.conf
+            - repository:
+                - baseurl: https://github.com/fepitre/qubes-
+                - component: linux-kernel-updater
+        /home/user/builder-r4.1-stable-5.4:
+          keys:
+            - 9FA64B92F95E706BF28E2CA6484010B5CDC576E2
+          release: 4.1
+          config:
+            - file: qubes-os-r4.1-kernel-stable-5.4.conf
+            - repository:
+                - baseurl: https://github.com/fepitre/qubes-
+                - component: linux-kernel-updater
+      volume-size: 20GiB
+      logs: logs-kernel
 
 # Above definitions of environments can be put in
 # separate pillar files. Just ensure to keep at least

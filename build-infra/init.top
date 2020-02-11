@@ -5,8 +5,10 @@ base:
     - build-infra.template-build
   {{ salt['pillar.get']('build-infra:keys-template', 'fedora-29-minimal') }}:
     - build-infra.template-keys
-  build-logs:
+{%- for log in salt['pillar.get']('build-infra:build-envs', {}).values()|list|map(attribute='logs')|unique|list %}
+  build-{{log}}:
     - build-infra.build-logs
+{%- endfor %}
 {%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
   keys-{{env}}:
     - build-infra.keys-vm
