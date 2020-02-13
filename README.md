@@ -242,7 +242,7 @@ Configuration tasks not included in this formula:
 
 3. In each logs VM:
 
-  - [ ] generate/import ssh key, add it to each logs repositories (default QubesOS/logs) as deploy key with write access
+  - [ ] generate/import ssh key, add it to each logs repositories (default QubesOS/build-logs) as deploy key with write access
   - [ ] import logs signing key
 
 4. Make sure build VMs are large enough if not specified in `pillar` data.

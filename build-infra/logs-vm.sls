@@ -1,5 +1,5 @@
 {% set logs_key_fpr = salt['pillar.get']('build-infra:logs_key_fpr', '1B760CED53D8EB5AE529BEBB16D7539A228D30DB') %}
-{% set logs_repo_url = 'git@github.com:' + salt['pillar.get']('build-infra:logs_repo', 'QubesOS/logs') %}
+{% set logs_repo_url = 'git@github.com:' + salt['pillar.get']('build-infra:logs_repo', 'QubesOS/build-logs') %}
 {% set build_bot_name = salt['pillar.get']('build-infra:build_bot_name', 'Qubes OS build bot') %}
 {% set build_bot_email = salt['pillar.get']('build-infra:build_bot_email', 'builder-bot@qubes-os.org') %}
 
