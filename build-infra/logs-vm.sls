@@ -1,12 +1,12 @@
-{% set build_logs_key_fpr = salt['pillar.get']('build-infra:build_logs_key_fpr', '1B760CED53D8EB5AE529BEBB16D7539A228D30DB') %}
-{% set build_logs_repo_url = 'git@github.com:' + salt['pillar.get']('build-infra:build_logs_repo', 'QubesOS/build-logs') %}
+{% set logs_key_fpr = salt['pillar.get']('build-infra:logs_key_fpr', '1B760CED53D8EB5AE529BEBB16D7539A228D30DB') %}
+{% set logs_repo_url = 'git@github.com:' + salt['pillar.get']('build-infra:logs_repo', 'QubesOS/logs') %}
 {% set build_bot_name = salt['pillar.get']('build-infra:build_bot_name', 'Qubes OS build bot') %}
 {% set build_bot_email = salt['pillar.get']('build-infra:build_bot_email', 'builder-bot@qubes-os.org') %}
 
 # logs signing key, secret key is needed too (not configured through salt)
 /home/user/qubes-build-log-key.asc:
   file.managed:
-    - contents_pillar: build-infra:build_logs_repo_public_key
+    - contents_pillar: build-infra:logs_repo_public_key
     - user: user
 
 gpg --import /home/user/qubes-build-log-key.asc:
@@ -15,7 +15,7 @@ gpg --import /home/user/qubes-build-log-key.asc:
     - onchange:
       - file: /home/user/qubes-build-log-key.asc
 
-{{build_logs_key_fpr}}:
+{{logs_key_fpr}}:
   gpg.present:
     - user: user
 # this does not work when fpr is used instead of keyid; and gpg.present does
@@ -31,13 +31,13 @@ gpg --import /home/user/qubes-build-log-key.asc:
       - user
       - group
     - onchange:
-      - gpg: {{build_logs_key_fpr}}
+      - gpg: {{logs_key_fpr}}
 
-echo {{build_logs_key_fpr}}:6 | gpg --import-ownertrust:
+echo {{logs_key_fpr}}:6 | gpg --import-ownertrust:
   cmd.run:
     - runas: user
     - require:
-      - gpg: {{build_logs_key_fpr}}
+      - gpg: {{logs_key_fpr}}
 
 /home/user/.ssh/id_rsa:
   file.managed:
@@ -56,7 +56,7 @@ github.com:
 # Disable for now because of Salt bug 37948
     - hash_known_hosts: False
 
-{{build_logs_repo_url}}:
+{{logs_repo_url}}:
   git.latest:
     - target: /home/user/QubesIncomingBuildLog
     - user: user
@@ -67,8 +67,8 @@ git verify-commit --raw HEAD 2>&1 >/dev/null | grep '^\[GNUPG:\] TRUST_ULTIMATE'
     - cwd: /home/user/QubesIncomingBuildLog
     - runas: user
     - require:
-      - git: {{build_logs_repo_url}}
-      - gpg: {{build_logs_key_fpr}}
+      - git: {{logs_repo_url}}
+      - gpg: {{logs_key_fpr}}
 
 /usr/local/etc/qubes-rpc/qubesbuilder.BuildLog:
   file.managed:
@@ -79,7 +79,7 @@ git verify-commit --raw HEAD 2>&1 >/dev/null | grep '^\[GNUPG:\] TRUST_ULTIMATE'
 {% load_yaml as git_config -%}
 user.name: {{build_bot_name}}
 user.email: {{build_bot_email}}
-user.signingkey: {{build_logs_key_fpr}}
+user.signingkey: {{logs_key_fpr}}
 commit.gpgsign: true
 gpg.program: gpg2
 {%- endload %}

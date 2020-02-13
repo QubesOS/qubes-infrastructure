@@ -12,10 +12,10 @@ multiple build environments, each of them have at least two VMs:
  - build-`ENV_NAME`
  - keys-`ENV_NAME`
 
-In addition to those, `build-logs` VM is created. Configuration allows:
+In addition to those, `logs` VM is created. Configuration allows:
 
- - build VM to upload build logs to `build-logs` VM
- - `build-logs` VM to unlock signing keys usage for appropriate keys VM
+ - build VM to upload build logs to `logs` VM
+ - `logs` VM to unlock signing keys usage for appropriate keys VM
  - build VM access the keys VM
 
 Each build VM have access to the network through Whonix Gateway, so all
@@ -90,18 +90,18 @@ Detailed description of the infrastructure
 Build infrastructure consists of several build environments. Each of them use 3 VMs:
 
 1. Build VM (`build-*`), responsible for:
-  - building the package with logging to build-logs VM in real time
+  - building the package with logging to `logs` VM in real time
   - sending build artifacts to Keys VM for signing (using split gpg)
   - uploading signed packages to repository
   - sending notifications to github (issue comments etc)
 
 2. Keys VM (`keys-*`), responsible for:
   - keeping signing keys
-  - signing packages, but only if build-logs VM acknowledged build log reception
+  - signing packages, but only if `logs` VM acknowledged build log reception
 
-3. Build logs VM (`build-logs`), common for all build environments, responsible for:
+3. Build VM (`logs-*`) VM (default `logs`), common for all their associated build environments, responsible for:
   - receiving build logs
-  - sending them (in form of signed commits) to build-logs repository
+  - sending them (in form of signed commits) to logs repositories
   - signaling appropriate Keys VM of successful logs reception and sending
 
 The above workflow and used qrexec services can be illustrated with the diagram below:
@@ -120,7 +120,7 @@ The above workflow and used qrexec services can be illustrated with the diagram 
                 |                                    |
                 v                                    |
         .---------------. 3. qubesbuilder.LogReceived|
-        | build-logs VM |----------------------------'
+        |    logs VM    |----------------------------'
         |               |                         .-,(  ),-.    
         |               | 2. push signed logs  .-(          )-. 
         |               |********************>(     github     )
@@ -240,9 +240,9 @@ Configuration tasks not included in this formula:
      - set `LINUX_REPO_BASEDIR` to a appropriate directory (pointing exact release version, like `$(SRC_DIR)/linux-yum/r4.0`)
      - include `$(HOME)/builder-github.conf`
 
-3. In `build-logs` VM:
+3. In each logs VM:
 
-  - [ ] generate/import ssh key, add it to QubesOS/build-logs repository as deploy key with write access
+  - [ ] generate/import ssh key, add it to each logs repositories (default QubesOS/logs) as deploy key with write access
   - [ ] import logs signing key
 
 4. Make sure build VMs are large enough if not specified in `pillar` data.
