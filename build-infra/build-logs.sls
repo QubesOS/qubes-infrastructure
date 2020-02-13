@@ -67,7 +67,7 @@ git verify-commit --raw HEAD 2>&1 >/dev/null | grep '^\[GNUPG:\] TRUST_ULTIMATE'
     - cwd: /home/user/QubesIncomingBuildLog
     - runas: user
     - require:
-      - git: {{build_logs_repo}}
+      - git: {{build_logs_repo_url}}
       - gpg: {{build_logs_key_fpr}}
 
 /usr/local/etc/qubes-rpc/qubesbuilder.BuildLog:
