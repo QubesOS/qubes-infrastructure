@@ -1,4 +1,9 @@
-{% for host in ['github.com', 'yum.qubes-os.org', 'deb.qubes-os.org', 'contrib.qubes-os.org'] %}
+{% set hosts = ['github.com'] %}
+{% for host in salt['pillar.get']('build-infra:remote-hosts', {}).keys() %}
+{% do hosts.append(host) %}
+{% endfor %}
+
+{% for host in hosts %}
 /etc/qubes-rpc/policy/local.ConnectSSH+{{host}}:
   file.managed:
     - contents:
