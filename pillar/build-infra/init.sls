@@ -50,26 +50,20 @@ build-infra:
       logs: logs
     kernel:
       builders-list:
-        /home/user/builder-r4.1-master:
+        /home/user/builder-r4.1-kernel:
           keys:
             - 9FA64B92F95E706BF28E2CA6484010B5CDC576E2
           release: 4.1
           config:
-            - file: qubes-os-r4.1-kernel-master.conf
-            - repository:
-                - baseurl: https://github.com/fepitre/qubes-
-                - component: linux-kernel-updater
-        /home/user/builder-r4.1-stable-5.4:
-          keys:
-            - 9FA64B92F95E706BF28E2CA6484010B5CDC576E2
-          release: 4.1
-          config:
-            - file: qubes-os-r4.1-kernel-stable-5.4.conf
+            - file: qubes-kernel.conf
             - repository:
                 - baseurl: https://github.com/fepitre/qubes-
                 - component: linux-kernel-updater
       volume-size: 20GiB
       logs: logs-kernel
+      build_report_repo: fepitre-bot/update-status-kernel
+      build_issues_repo: fepitre-bot/build-issues-kernel
+      logs_repo: fepitre-bot/logs-kernel
 
 # Above definitions of environments can be put in
 # separate pillar files. Just ensure to keep at least
