@@ -61,9 +61,6 @@ build-infra:
                 - component: linux-kernel-updater
       volume-size: 20GiB
       logs: logs-kernel
-      build_report_repo: fepitre-bot/update-status-kernel
-      build_issues_repo: fepitre-bot/build-issues-kernel
-      logs_repo: fepitre-bot/logs-kernel
 
 # Above definitions of environments can be put in
 # separate pillar files. Just ensure to keep at least

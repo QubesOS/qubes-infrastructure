@@ -3,8 +3,6 @@ base:
     - build-infra
   logs:
     - build-infra.logs
-  logs-kernel:
-    - build-infra.logs-kernel
   build-fedora1:
     - build-infra.build-vms
   build-fedora2:
@@ -12,4 +10,10 @@ base:
   build-centos1:
     - build-infra.build-vms
   build-debian1:
+    - build-infra.build-vms
+  logs-kernel:
+    - build-infra.logs-kernel-repo
+    - build-infra.logs-kernel
+  build-kernel:
+    - build-infra.logs-kernel-repo
     - build-infra.build-vms
