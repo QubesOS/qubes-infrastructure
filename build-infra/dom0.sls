@@ -5,7 +5,7 @@
     - present:
       - label: green
     - prefs:
-      - template: {{ salt['pillar.get']('build-infra:logs-template', 'fedora-30') }}
+      - template: {{ salt['pillar.get']('build-infra:logs-template', 'fedora-31') }}
       - netvm: {{ salt['pillar.get']('build-infra:logs-netvm', 'sys-firewall') }}
 {%- endfor %}
 
@@ -17,7 +17,7 @@ build-{{env}}:
     - present:
       - label: green
     - prefs:
-      - template: {{ salt['pillar.get']('build-infra:build-template', 'fedora-30') }}
+      - template: {{ salt['pillar.get']('build-infra:build-template', 'fedora-31') }}
       - netvm: {{ salt['pillar.get']('build-infra:build-netvm', 'sys-whonix') }}
 
 {% if salt['pillar.get']('build-infra:build-envs:' + env + ':volume-size') %}
@@ -31,7 +31,7 @@ keys-{{env}}:
     - present:
       - label: black
     - prefs:
-      - template: {{ salt['pillar.get']('build-infra:keys-template', 'fedora-30-minimal') }}
+      - template: {{ salt['pillar.get']('build-infra:keys-template', 'fedora-31-minimal') }}
       - netvm: none
 
 /etc/qubes-rpc/policy/qubesbuilder.LogReceived+build-{{env}}:
