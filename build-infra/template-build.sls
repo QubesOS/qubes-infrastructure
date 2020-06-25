@@ -14,7 +14,6 @@ builder-dependencies:
       - wget
       - curl
       - qubes-gpg-split
-      - python2-pyyaml
       - python3-pyyaml
       - mock
       - pbuilder
@@ -26,7 +25,6 @@ builder-dependencies:
       - devscripts
 # for salt gpg module
       - gnupg2
-      - python2-gnupg
       - python3-gnupg
 # for release ISO process
       - mktorrent
