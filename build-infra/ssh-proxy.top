@@ -1,7 +1,7 @@
 base:
   dom0:
     - build-infra.ssh-proxy-dom0
-  sys-net:
+  {{ salt['pillar.get']('build-infra:netvm', 'sys-net') }}:
     - build-infra.ssh-proxy
 {%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
   build-{{env}}:

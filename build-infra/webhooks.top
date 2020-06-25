@@ -2,7 +2,7 @@ base:
   # assume sys-net is on fedora-31 template
   fedora-31:
     - build-infra.template-net
-  sys-net:
+  {{ salt['pillar.get']('build-infra:netvm', 'sys-net') }}:
     - build-infra.webhooks-base
     - build-infra.webhooks-builder
   dom0:

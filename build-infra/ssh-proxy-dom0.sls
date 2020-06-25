@@ -8,7 +8,7 @@
   file.managed:
     - contents:
 {%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
-        - build-{{env}} sys-net allow
+        - build-{{env}} {{ salt['pillar.get']('build-infra:netvm', 'sys-net') }} allow
 {% endfor %}
 
 {% endfor %}

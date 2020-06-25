@@ -2,6 +2,7 @@
 
 build-infra:
 # Default NetVMs and templates:
+#  netvm: sys-net
 #  logs-template: fedora-31
 #  logs-netvm: sys-firewall
 #  build-template: fedora-31
