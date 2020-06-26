@@ -1,5 +1,7 @@
 # github IP range
 iptables -I INPUT -p tcp -s 192.30.252.0/22 --dport 80 -j ACCEPT
+iptables -I INPUT -p tcp -s 185.199.108.0/22 --dport 80 -j ACCEPT
+iptables -I INPUT -p tcp -s 140.82.112.0/20 --dport 80 -j ACCEPT
 
 ln -s /rw/config/webhooks.nginx /etc/nginx/default.d/webhooks.conf
 ln -s /rw/config/webhooks.service /etc/systemd/system/webhooks.service
