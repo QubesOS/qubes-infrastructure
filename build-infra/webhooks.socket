@@ -1,7 +1,0 @@
-[Unit]
-Description=Github webhooks proxy
-Before=nginx.service
-
-[Socket]
-ListenStream=/var/run/qubes/github-webhooks.sock
-Restart=on-failure

@@ -2,5 +2,7 @@ webhook-dependencies:
   pkg.installed:
     - pkgs:
       - nginx
-      - python2-flup
+      - uwsgi
+      - uwsgi-plugin-python3
+      - python3-flask
       - nmap-ncat

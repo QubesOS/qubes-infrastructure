@@ -4,8 +4,11 @@ iptables -I INPUT -p tcp -s 185.199.108.0/22 --dport 80 -j ACCEPT
 iptables -I INPUT -p tcp -s 140.82.112.0/20 --dport 80 -j ACCEPT
 
 ln -s /rw/config/webhooks.nginx /etc/nginx/default.d/webhooks.conf
-ln -s /rw/config/webhooks.service /etc/systemd/system/webhooks.service
-ln -s /rw/config/webhooks.socket /etc/systemd/system/webhooks.socket
+ln -s /home/user/webhooks/webhooks.service /etc/systemd/system/webhooks.service
+
+mkdir -p /var/run/webhooks
+chown user:nginx /var/run/webhooks
+
 systemctl daemon-reload
-systemctl --no-block start webhooks.socket
+systemctl --no-block start webhooks.service
 systemctl --no-block start nginx.service

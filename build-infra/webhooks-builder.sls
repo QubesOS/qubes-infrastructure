@@ -1,14 +1,9 @@
-/home/user/webhooks/trigger_build.py:
-  file.managed:
-    - source: salt://build-infra/qubes-builder-github/github-webhooks/trigger-build
-    - mode: 0755
+/home/user/webhooks:
+  file.recurse:
+    - source: salt://build-infra/qubes-builder-github/webhooks
     - user: user
-
-/home/user/webhooks/process_comment.py:
-  file.managed:
-    - source: salt://build-infra/qubes-builder-github/github-webhooks/process-comment
-    - mode: 0755
-    - user: user
+    - group: user
+    - file_mode: keep
 
 /home/user/.config/qubes-builder-github/build-vms.list:
   file.managed:

@@ -1,9 +1,0 @@
-[Unit]
-Description=Github webhooks proxy
-
-[Service]
-Environment=PYTHONPATH=/home/user/webhooks
-ExecStart=/home/user/webhooks/fcgi-wrapper
-StandardInput=socket
-Restart=on-failure
-User=user
