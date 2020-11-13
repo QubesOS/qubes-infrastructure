@@ -1,6 +1,9 @@
 [submodule "build-infra/qubes-builder"]
 	path = build-infra/qubes-builder
-	url = https://github.com/qubesos/qubes-builder
+	url = https://github.com/QubesOS/qubes-builder
 [submodule "build-infra/qubes-builder-github"]
 	path = build-infra/qubes-builder-github
-	url = https://github.com/qubesos/qubes-builder-github
+	url = https://github.com/QubesOS/qubes-builder-github
+[submodule "qubes-infrastructure-mirrors"]
+	path = qubes-infrastructure-mirrors
+	url = https://github.com/QubesOS/qubes-infrastructure-mirrors
