@@ -1,0 +1,22 @@
+#!/bin/bash --
+{
+set -eufo pipefail
+export LC_ALL=C
+usage () {
+    printf %s\\n "USAGE: $0 -- REMOTE DIRECTORY SHA" >&2
+    exit 1
+}
+if [[ "$#" -ne 4 ]] || [[ "x$1" != 'x--' ]]; then usage; fi
+remote=$2 directory=$3 sha=$4
+success=no
+trap '[ "$success" = yes ] || rm -rf -- "$directory"' EXIT
+[[ ${#sha} -eq 40 ]] || [[ ${#sha} -eq 64 ]] || usage
+[[ $sha =~ ^[0-9a-f]+$ ]] || usage
+if [[ -d "$directory" ]]; then
+    git clone --no-checkout -- "$remote" "$directory"
+fi
+git -C "$directory" checkout "$sha"
+git update-ref FETCH_HEAD "$sha"
+git reset --hard "$sha"
+success=yes
+}

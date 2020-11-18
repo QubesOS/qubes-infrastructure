@@ -206,29 +206,22 @@ github.com:
 {% endif %}
 
 {% for builder in builders_list %}
-{% set config_baseurl = salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':config:repository:baseurl', 'https://github.com/QubesOS/qubes-') %}
+{% set config_baseurl = salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':config:repository:baseurl', 'ssh://github.com/QubesOS/qubes-') %}
 {% set config_repo = salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':config:repository:component', 'release-configs') %}
 {% set config_file = salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':config:file') %}
 {% set keys =  salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':keys', []) %}
 
-{{builder}}-get:
-  git.latest:
-    - name : https://github.com/QubesOS/qubes-builder
-    - target: {{ builder }}
-    - user: user
-
 {{builder}}-check:
-  cmd.run:
-    - name: git verify-tag --raw "$(git describe)" 2>&1 >/dev/null | grep '^\[GNUPG:\] TRUST_FULLY'
-    - cwd: {{ builder }}
+  cmd.script:
+    - source: salt://build-infra/safe-checkout-sha
+    - args: ['--', 'ssh://git@github.com/QubesOS/qubes-builder', {{ builder|yaml_encode }}, 'e8293887c39a5e39fe70d2e96564681a37ef8248']
     - runas: user
     - require:
-      - git: {{builder}}-get
       - gpg: {{qubes_master_key_fpr}}
 
 {{builder}}-init:
   cmd.run:
-    - name: "BUILDERCONF= GIT_URL_builder=https://github.com/QubesOS/qubes-builder COMPONENTS=builder make get-sources"
+    - name: "BUILDERCONF= GIT_URL_builder=ssh://github.com/QubesOS/qubes-builder COMPONENTS=builder make get-sources"
     - cwd: {{ builder }}
     - runas: user
     - require:
@@ -242,6 +235,7 @@ github.com:
     - runas: user
     - require:
       - cmd: {{builder}}-init
+      - cmd: {{builder}}-check
 {% endfor %}
 
 {{builder}}-configs:
