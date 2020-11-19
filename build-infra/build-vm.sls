@@ -4,6 +4,12 @@
 {% set env = grains['id']|replace('build-','') %}
 {% set builders_list = salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list').keys() %}
 {% set last_builder_dir = builders_list|last %}
+{%- for builder in builders_list %}
+{#- check that builder names are reasonable #}
+{#- I couldn’t find a way to fail with a decent message, so a ZeroDivisionError
+    will have to do #}
+{%- if not (builder | regex_match('^[A-Za-z][A-Za-z0-9_-]*$')) -%}{{ 0/0 }}{%- endif %}
+{%- endfor %}
 
 /usr/local/etc/qubes-rpc/qubesbuilder.CopyTemplateBack:
   file.symlink:
