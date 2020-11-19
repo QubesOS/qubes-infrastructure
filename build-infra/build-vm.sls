@@ -222,6 +222,7 @@ github.com:
     - source: salt://build-infra/safe-checkout-sha
     - args: ['--', 'https://git@github.com/QubesOS/qubes-builder', {{ builder|yaml_encode }}, 'e8293887c39a5e39fe70d2e96564681a37ef8248']
     - runas: user
+    - creates: {{builder}}
     - require:
       - gpg: {{qubes_master_key_fpr}}
 
