@@ -15,7 +15,8 @@ trap '[ "$success" = yes ] || rm -rf -- "$directory"' EXIT
 if [[ -d "$directory" ]]; then
     git clone --no-checkout -- "$remote" "$directory"
 fi
-git -C "$directory" checkout "$sha"
+cd -- "$directory"
+git checkout "$sha"
 git update-ref FETCH_HEAD "$sha"
 git reset --hard "$sha"
 success=yes
