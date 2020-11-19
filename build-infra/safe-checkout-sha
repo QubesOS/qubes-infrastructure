@@ -1,5 +1,4 @@
 #!/bin/bash --
-{
 set -eufo pipefail
 export LC_ALL=C
 usage () {
@@ -20,4 +19,3 @@ git checkout "$sha"
 git update-ref FETCH_HEAD "$sha"
 git reset --hard "$sha"
 success=yes
-}
