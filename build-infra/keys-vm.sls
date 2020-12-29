@@ -2,6 +2,6 @@
   file.managed:
     - contents: |
         #!/bin/sh
-        touch /var/run/qubes-gpg-split/stat.$1
+        touch /run/qubes-gpg-split/stat.$1
     - mode: 0755
     - makedirs: True

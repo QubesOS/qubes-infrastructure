@@ -1,4 +1,4 @@
 location / {
     include uwsgi_params;
-    uwsgi_pass unix:/var/run/webhooks/webhooks.sock;
+    uwsgi_pass unix:/run/webhooks/webhooks.sock;
 }
