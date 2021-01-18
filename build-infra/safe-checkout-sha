@@ -11,11 +11,11 @@ success=no
 trap '[ "$success" = yes ] || rm -rf -- "$directory"' EXIT
 [[ ${#sha} -eq 40 ]] || [[ ${#sha} -eq 64 ]] || usage
 [[ $sha =~ ^[0-9a-f]+$ ]] || usage
-if [[ -d "$directory" ]]; then
+if ! [[ -d "$directory" ]]; then
     git clone --no-checkout -- "$remote" "$directory"
 fi
 cd -- "$directory"
-git checkout "$sha"
-git update-ref FETCH_HEAD "$sha"
 git reset --hard "$sha"
+git checkout
+git update-ref FETCH_HEAD "$sha"
 success=yes
