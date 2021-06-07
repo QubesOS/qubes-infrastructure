@@ -1,6 +1,6 @@
 {% set qubes_master_key_fpr = '427F11FD0FAA4B080123F01CDDFA1A3E36879494' %}
 {% set commands_keyring = '/home/user/.config/qubes-builder-github/trusted-keys-for-commands.gpg' %}
-
+{% set import_master_key = 'gpg --import /home/user/qubes-master-key.asc'|yaml_encode %}
 {% set env = grains['id']|replace('build-','') %}
 {% set builders_list = salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list').keys() %}
 {% set last_builder_dir = builders_list|last %}
@@ -63,7 +63,7 @@
     - user: user
 
 # populate keys to ease qubes-builder verification
-gpg --import /home/user/qubes-master-key.asc:
+{{import_master_key}}:
   cmd.run:
     - runas: user
     - onchange:
@@ -72,8 +72,9 @@ gpg --import /home/user/qubes-master-key.asc:
 {{qubes_master_key_fpr}}:
   gpg.present:
     - user: user
+    - require: {{import_master_key}}
 
-echo {{qubes_master_key_fpr}}:6 | gpg --import-ownertrust && gpg --check-trustdb:
+'echo {{qubes_master_key_fpr}}:6 | gpg --import-ownertrust && gpg --check-trustdb':
   cmd.run:
     - runas: user
     - require:
@@ -217,8 +218,6 @@ github.com:
     - args: ['--', 'https://github.com/QubesOS/qubes-builder', {{ builder }}, 'dfc98842ff2184dc936d4f3febdad79a8ab08029']
     - runas: user
     - creates: {{builder}}
-    - require:
-      - gpg: {{qubes_master_key_fpr}}
 
 {{builder}}-init:
   cmd.run:
