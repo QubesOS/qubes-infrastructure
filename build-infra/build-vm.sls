@@ -259,7 +259,7 @@ github.com:
 
 {{builder}}-get-sources:
   cmd.run:
-    - name: "make get-sources"
+    - name: "COMPONENTS='$(BUILDER_PLUGINS)' make get-sources"
     - cwd: {{ builder }}
     - runas: user
     - require:
