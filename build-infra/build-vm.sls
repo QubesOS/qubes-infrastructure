@@ -72,7 +72,8 @@
 {{qubes_master_key_fpr}}:
   gpg.present:
     - user: user
-    - require: {{import_master_key}}
+    - require:
+      - cmd: {{import_master_key}}
 
 'echo {{qubes_master_key_fpr}}:6 | gpg --import-ownertrust && gpg --check-trustdb':
   cmd.run:
