@@ -8,7 +8,7 @@ License:	GPL 2.0
 BuildArch:  noarch
 URL:		https://www.qubes-os.org/
 Source:	%{name}-%{version}.tar.gz
-
+BuildRequires: make
 Requires:	qubes-mgmt-salt
 Requires:	qubes-mgmt-salt-dom0
 
