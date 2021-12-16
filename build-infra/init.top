@@ -1,9 +1,9 @@
 base:
   dom0:
     - build-infra.dom0
-  {{ salt['pillar.get']('build-infra:build-template', 'fedora-33') }}:
+  {{ salt['pillar.get']('build-infra:build-template', 'fedora-34') }}:
     - build-infra.template-build
-  {{ salt['pillar.get']('build-infra:keys-template', 'fedora-33-minimal') }}:
+  {{ salt['pillar.get']('build-infra:keys-template', 'fedora-34-minimal') }}:
     - build-infra.template-keys
 {%- for log in salt['pillar.get']('build-infra:build-envs', {}).values()|list|map(attribute='logs')|unique|list %}
   {{log}}:
