@@ -34,29 +34,24 @@ keys-{{env}}:
       - template: {{ salt['pillar.get']('build-infra:keys-template', 'fedora-33-minimal') }}
       - netvm: none
 
-/etc/qubes-rpc/policy/qubesbuilder.LogReceived+build-{{env}}:
-  file.managed:
-    - contents:
-      - {{salt['pillar.get']('build-infra:build-envs:' + env + ':logs')}} dom0 allow,target=keys-{{env}}
-
 {% endfor %}
 
 ###
 
-/etc/qubes-rpc/policy/qubes.Gpg:
-  file.prepend:
-    - text:
-{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
-      - build-{{env}} keys-{{env}} allow
-      - $anyvm keys-{{env}} deny
-{% endfor %}
-
-/etc/qubes-rpc/policy/qubesbuilder.BuildLog:
+/etc/qubes/policy.d/20-qubesbuilder.policy:
   file.managed:
-    - contents:
+    - contents: |
+        qubesbuilder.AttachDisk * @anyvm dom0 allow
 {%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
-      - build-{{env}} dom0 allow,target={{salt['pillar.get']('build-infra:build-envs:' + env + ':logs')}}
-{% endfor %}
+{%- set logvm = salt['pillar.get']('build-infra:build-envs:' + env + ':logs') %}
+        qubesbuilder.LogReceived +build-{{env}} {{logvm}} dom0 allow target=keys+{{env}}
+        qubes.Gpg * build-{{env}} keys-{{env}} allow
+        qubes.Gpg * build-{{env}} @default allow target=keys-{{env}}
+        qubes.Gpg * @anyvm keys-{{env}} deny
+        qubesbuilder.BuildLog * build-{{env}} dom0 allow target={{logvm}}
+        qubesbuilder.ExportDisk * build-{{env}} dom0 allow
+        qubesbuilder.CopyTemplateBack * @anyvm build-{{env}} allow
+{%- endfor %}
 
 /etc/qubes-rpc/qubesbuilder.ExportDisk:
   file.managed:
@@ -69,27 +64,3 @@ keys-{{env}}:
     - source: salt://build-infra/qubes-builder/rpc-services/qubesbuilder.AttachDisk
     - mode: 0755
     - makedirs: True
-
-/etc/qubes-rpc/policy/qubesbuilder.AttachDisk:
-  file.managed:
-    - source: salt://build-infra/qubes-builder/rpc-services/policy/qubesbuilder.AttachDisk
-    - mode: 0664
-    - makedirs: True
-
-/etc/qubes-rpc/policy/qubesbuilder.ExportDisk:
-  file.managed:
-    - mode: 0664
-    - makedirs: True
-    - contents:
-{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
-      - build-{{env}} dom0 allow
-{% endfor %}
-
-/etc/qubes-rpc/policy/qubesbuilder.CopyTemplateBack:
-  file.managed:
-    - mode: 0664
-    - makedirs: True
-    - contents:
-{%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
-      - $anyvm build-{{env}} allow
-{% endfor %}
