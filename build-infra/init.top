@@ -1,3 +1,5 @@
+{% set any_builderv2 = salt['pillar.get']('build-infra:build-envs', {}).values() | selectattr('builderv2', 'defined') | list %}
+
 base:
   dom0:
     - build-infra.dom0
@@ -5,13 +7,22 @@ base:
     - build-infra.template-build
   {{ salt['pillar.get']('build-infra:keys-template', 'fedora-36-minimal') }}:
     - build-infra.template-keys
+{% if any_builderv2 %}
+  builder-dvm:
+    - build-infra.builder-dvm
+{% endif %}
 {%- for log in salt['pillar.get']('build-infra:build-envs', {}).values()|list|map(attribute='logs')|unique|list %}
   {{log}}:
     - build-infra.logs-vm
 {%- endfor %}
 {%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
+  {% set builderv2 = salt['pillar.get']('build-infra:build-envs:' + env + ':builderv2', False) %}
   keys-{{env}}:
     - build-infra.keys-vm
   build-{{env}}:
+  {% if builderv2 %}
+    - build-infra.build2-vm
+  {% else %}
     - build-infra.build-vm
+  {% endif %}
 {%- endfor %}

@@ -1,0 +1,9 @@
+# Common builder-github settings to include in builder.yml (you can source
+# this file using `include` directive).
+
+github:
+  state-dir: /home/user/github-notify-state
+  api-key: {{ pillar['build-infra']['github_api_key'] }}
+  build-report-repo: {{ salt['pillar.get']('build-infra:build_report_repo', 'QubesOS/updates-status') }}
+  build-issues-repo: {{ salt['pillar.get']('build-infra:build_issues_repo', 'QubesOS/build-issues') }}
+  logs-repo: {{ salt['pillar.get']('build-infra:logs_repo', 'QubesOS/build-logs') }}

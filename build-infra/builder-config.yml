@@ -1,0 +1,14 @@
+git:
+  baseurl: {{config_baseurl}}
+  prefix: {{config_prefix}}
+
+artifacts-dir: {{builder}}
+
+executor:
+  type: qubes
+  options:
+    dispvm: builder-dvm
+
++components:
+  - {{config_component}}:
+      branch: {{config_branch}}

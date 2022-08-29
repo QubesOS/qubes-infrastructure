@@ -4,3 +4,6 @@
 [submodule "build-infra/qubes-builder-github"]
 	path = build-infra/qubes-builder-github
 	url = https://github.com/qubesos/qubes-builder-github
+[submodule "build-infra/qubes-builderv2"]
+	path = build-infra/qubes-builderv2
+	url = https://github.com/QubesOS/qubes-builderv2
