@@ -39,3 +39,7 @@ builder-dependencies:
       - python3-pygithub
       - openssl
       - tree
+# for mkmetalink
+      - python3-aiohttp
+      - python3-lxml
+      - python3-jinja2

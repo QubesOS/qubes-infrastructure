@@ -22,6 +22,7 @@ base:
   build-{{env}}:
   {% if builderv2 %}
     - build-infra.build2-vm
+    - build-infra.mkmetalink
   {% else %}
     - build-infra.build-vm
   {% endif %}
