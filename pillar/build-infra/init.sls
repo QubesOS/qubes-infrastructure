@@ -37,14 +37,14 @@ build-infra:
         /home/user/builder-r4.2:
           release: 4.2
           config:
-            - file: R4.2/qubes-os-r4.2-dom0.conf
+            - file: R4.2/qubes-os-r4.2-dom0.yml
             - repository:
                 - baseurl: https://github.com/QubesOS/qubes-
                 - component: release-configs
         /home/user/builder-r4.2:
           release: 4.2
           config:
-            - file: R4.2/qubes-os-r4.2-fedora.conf
+            - file: R4.2/qubes-os-r4.2-fedora.yml
             - repository:
                 - baseurl: https://github.com/QubesOS/qubes-
                 - component: release-configs
