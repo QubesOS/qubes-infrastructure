@@ -43,3 +43,9 @@ builder-dependencies:
       - python3-aiohttp
       - python3-lxml
       - python3-jinja2
+
+# enable ripemd160 hash, necessary for metalink
+/etc/pki/tls/openssl.cnf:
+  file.uncomment:
+    - regex: "activate = 1|.*default_sect|.*legacy_sect"
+    - char: "##"
