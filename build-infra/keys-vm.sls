@@ -10,7 +10,7 @@
     - makedirs: True
 
 {% if is_builderv2 %}
-/home/user/.bash_profile:
+/home/user/.profile:
   file.append:
     # 1 year, basically forever, as builderv2 has much better isolation on its
     # own
