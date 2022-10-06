@@ -67,7 +67,7 @@ keys-{{env}}:
 {%- endif %}
 {%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
 {%- set logvm = salt['pillar.get']('build-infra:build-envs:' + env + ':logs') %}
-        qubesbuilder.LogReceived +build-{{env}} {{logvm}} dom0 allow target=keys+{{env}}
+        qubesbuilder.LogReceived +build-{{env}} {{logvm}} dom0 allow target=keys-{{env}}
         qubes.Gpg * build-{{env}} keys-{{env}} allow
         qubes.Gpg * build-{{env}} @default allow target=keys-{{env}}
         qubes.Gpg * @anyvm keys-{{env}} deny
