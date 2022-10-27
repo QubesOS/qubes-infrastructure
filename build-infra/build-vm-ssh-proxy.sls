@@ -2,6 +2,7 @@
   file.append:
     - name: /home/user/.ssh/config
     - makedirs: True
+    - order: last
     - text: |
         Host *
             ControlMaster auto
