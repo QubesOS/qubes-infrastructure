@@ -1,6 +1,6 @@
 /home/user/webhooks:
   file.recurse:
-    - source: salt://build-infra/qubes-builder-github/webhooks
+    - source: salt://build-infra/qubes-builderv2-github/webhooks
     - user: user
     - group: user
     - file_mode: keep
