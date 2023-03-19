@@ -3,11 +3,11 @@
 build-infra:
 # Default NetVMs and templates:
 #  netvm: sys-net
-#  logs-template: fedora-36
+#  logs-template: fedora-37
 #  logs-netvm: sys-firewall
-#  build-template: fedora-36
+#  build-template: fedora-37
 #  build-netvm: sys-whonix
-#  keys-template: fedora-36-minimal
+#  keys-template: fedora-37-minimal
 
 # example list of build environments:
   build-envs:
