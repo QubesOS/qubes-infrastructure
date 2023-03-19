@@ -184,7 +184,7 @@ commands-keyring:
 {{host}}:
   ssh_known_hosts.present:
     - user: user
-    - enc: ssh-rsa
+    - enc: {{config.ssh_host_enc}}
     - key: {{config.ssh_host_key}}
     - hash_known_hosts: False
 {% endfor %}
