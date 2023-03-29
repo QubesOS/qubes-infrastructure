@@ -10,9 +10,3 @@ github:
 {% if salt['pillar.get']('build-infra:iso_base_url') %}
   iso-base-url: {{ salt['pillar.get']('build-infra:iso_base_url') }}
 {% endif %}
-{% if salt['pillar.get']('build-infra:openqa_key') and salt['pillar.get']('build-infra:openqa_secret') %}
-  openqa:
-    server: {{ salt['pillar.get']('build-infra:openqa_server', 'openqa.qubes-os.org') }}
-    key: {{ salt['pillar.get']('build-infra:openqa_key') }}
-    secret: {{ salt['pillar.get']('build-infra:openqa_secret') }}
-{% endif %}

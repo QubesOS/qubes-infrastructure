@@ -115,6 +115,14 @@ gpg --import /home/user/qubes-developers-keys.asc:
     - user: user
     - mode: 0600
 
+/home/user/.config/openqa/client.conf:
+  file.managed:
+    - source: salt://build-infra/openqa-client.conf
+    - makedirs: True
+    - template: jinja
+    - user: user
+    - mode: 0600
+
 /home/user/github-notify-state:
   file.directory:
     - makedirs: True
