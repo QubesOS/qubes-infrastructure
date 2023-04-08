@@ -115,6 +115,7 @@ gpg --import /home/user/qubes-developers-keys.asc:
     - user: user
     - mode: 0600
 
+{% if salt['pillar.get']('build-infra:openqa_key') and salt['pillar.get']('build-infra:openqa_secret') %}
 /home/user/.config/openqa/client.conf:
   file.managed:
     - source: salt://build-infra/openqa-client.conf
@@ -122,6 +123,7 @@ gpg --import /home/user/qubes-developers-keys.asc:
     - template: jinja
     - user: user
     - mode: 0600
+{% endif %}
 
 /home/user/github-notify-state:
   file.directory:
