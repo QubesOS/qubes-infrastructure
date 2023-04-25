@@ -74,7 +74,7 @@ keys-{{env}}:
         qubesbuilder.BuildLog * build-{{env}} dom0 allow target={{logvm}}
 {%- if salt['pillar.get']('build-infra:build-envs:' + env + ':builderv2', False) %}
         admin.vm.CreateDisposable * build-{{env}} dom0 allow
-        admin.vm.CreateDisposable * build-{{env}} builder-dvm allow
+        admin.vm.CreateDisposable * build-{{env}} builder-dvm allow target=dom0
         
         admin.vm.Start * build-{{env}} @tag:disp-created-by-build-{{env}} allow target=dom0
         admin.vm.Kill * build-{{env}} @tag:disp-created-by-build-{{env}} allow target=dom0
