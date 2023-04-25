@@ -44,6 +44,12 @@ builder-dependencies:
       - python3-aiohttp
       - python3-lxml
       - python3-jinja2
+# for arch packages (builderv2)
+      - python3-jinja2-cli
+      - pacman
+      - m4
+      - asciidoc
+
 
 # enable ripemd160 hash, necessary for metalink
 /etc/pki/tls/openssl.cnf:
