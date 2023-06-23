@@ -33,7 +33,6 @@ builder-dependencies:
       - bison
 # extra for builderv2
       - python3-packaging
-      - qubes-gpg-split
       - python3-pathspec
       - python3-debian
       - python3-pygithub
