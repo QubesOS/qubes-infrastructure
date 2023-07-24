@@ -11,4 +11,11 @@ executor:
 
 +components:
   - {{config_component}}:
+      packages: false
       branch: {{config_branch}}
+{%- if config_maintainers %}
+      maintainers:
+{%- for key in config_maintainers %}
+        - {{key}}
+{%- endfor %}
+{% endif %}

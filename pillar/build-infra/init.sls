@@ -13,15 +13,15 @@ build-infra:
   build-envs:
     fedora1:
       builders-list:
-        /home/user/builder-r4.0:
-          keys:
-            - 9FA64B92F95E706BF28E2CA6484010B5CDC576E2
-          release: 4.0
+        /home/user/builder-r4.2:
+          release: 4.2
           config:
-            - file: R4.0/qubes-os-r4.0-dom0.conf
+            - file: R4.2/qubes-os-r4.2-host.conf
             - repository:
                 - baseurl: https://github.com/QubesOS-contrib/qubes-
                 - component: contrib-configs
+                - maintainers:
+                    - 9FA64B92F95E706BF28E2CA6484010B5CDC576E2
         /home/user/builder-r4.1:
           release: 4.1
           config:
@@ -38,13 +38,6 @@ build-infra:
           release: 4.2
           config:
             - file: R4.2/qubes-os-r4.2-dom0.yml
-            - repository:
-                - baseurl: https://github.com/QubesOS/qubes-
-                - component: release-configs
-        /home/user/builder-r4.2:
-          release: 4.2
-          config:
-            - file: R4.2/qubes-os-r4.2-fedora.yml
             - repository:
                 - baseurl: https://github.com/QubesOS/qubes-
                 - component: release-configs

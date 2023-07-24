@@ -227,7 +227,7 @@ builder-github-checkout:
 {% set config_repo = salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':config:repository:component', 'release-configs') %}
 {% set config_branch = salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':config:repository:branch', 'master') %}
 {% set config_file = salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':config:file') %}
-{% set keys =  salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':keys', []) %}
+{% set config_maintainers =  salt['pillar.get']('build-infra:build-envs:' + env + ':builders-list:' + builder + ':config:repository:maintainers', []) %}
 
 {{builder}}:
   file.directory:
@@ -246,6 +246,7 @@ builder-github-checkout:
         config_prefix: {{config_baseurl.split('/')[3:]|join('/')}}
         config_component: {{config_repo}}
         config_branch: {{config_branch}}
+        config_maintainers: {{config_maintainers}}
         builder: {{builder}}
 
 {{builder}}-init:
