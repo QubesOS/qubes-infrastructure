@@ -79,6 +79,7 @@ keys-{{env}}:
         admin.vm.Start * build-{{env}} @tag:disp-created-by-build-{{env}} allow target=dom0
         admin.vm.Kill * build-{{env}} @tag:disp-created-by-build-{{env}} allow target=dom0
         
+        qubes.Filecopy * build-{{env}} @tag:disp-created-by-build-{{env}} allow
         qubesbuilder.FileCopyIn * build-{{env}} @tag:disp-created-by-build-{{env}} allow
         qubesbuilder.FileCopyOut * build-{{env}} @tag:disp-created-by-build-{{env}} allow
         
