@@ -1,7 +1,13 @@
 # github IP range
-iptables -I INPUT -p tcp -s 192.30.252.0/22 --dport 80 -j ACCEPT
-iptables -I INPUT -p tcp -s 185.199.108.0/22 --dport 80 -j ACCEPT
-iptables -I INPUT -p tcp -s 140.82.112.0/20 --dport 80 -j ACCEPT
+if nft list chain ip qubes custom-input >/dev/null; then
+  nft add rule ip qubes custom-input ip saddr 192.30.252.0/22 tcp dport 80 accept
+  nft add rule ip qubes custom-input ip saddr 185.199.108.0/22 tcp dport 80 accept
+  nft add rule ip qubes custom-input ip saddr 140.82.112.0/20 tcp dport 80 accept
+else
+  iptables -I INPUT -p tcp -s 192.30.252.0/22 --dport 80 -j ACCEPT
+  iptables -I INPUT -p tcp -s 185.199.108.0/22 --dport 80 -j ACCEPT
+  iptables -I INPUT -p tcp -s 140.82.112.0/20 --dport 80 -j ACCEPT
+fi
 
 ln -s /rw/config/webhooks.nginx /etc/nginx/default.d/webhooks.conf
 ln -s /home/user/webhooks/webhooks.service /etc/systemd/system/webhooks.service
