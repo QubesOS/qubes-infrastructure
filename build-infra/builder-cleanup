@@ -17,12 +17,15 @@ for builder in builder-r*; do
     rm -rf $builder/chroot-*/home/user/qubes-src/*
     rm -rf $builder/qubes-src/installer-qubes-os/build
     rm -f $builder/qubes-src/installer-qubes-os/yum/*/rpm/*.rpm
-    rm -f $builder/qubes-src/linux-kernel*/*.tar.*
+    rm -f $builder/qubes-src/linux-kernel*/*.tar.gz
+    rm -f $builder/qubes-src/linux-kernel*/*.tar.xz
     rm -f $builder/qubes-src/linux-kernel*/*.tar
     rm -f $builder/qubes-src/vmm-xen-stubdom-linux/dl/*.tar
     rm -rf $builder/chroot-*/home/user/.ccache
     sudo rm -rf $builder/chroot-*/var/cache/pungi/*
     find $builder/chroot-*/var/cache/apt/archives -type f -print0 |sudo xargs -0r rm -f
+    # builderv2
+    rm -f $builder/distfiles/linux-kernel*/*.tar
     # remove all but latest version of a package in current-testing
     # repositories
     for repotype in current-testing; do
