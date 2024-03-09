@@ -7,48 +7,71 @@ exec 2>>"$logfile"
 
 rm -f builder-r*-dom0/qubes-src/linux-template-builder/rpm/noarch/*.rpm
 
-for builder in builder-r*; do
-    exec 9<$builder/builder.lock
+builderv2=
+if [ -r qubes-builderv2/builder.lock ]; then
+    exec 9<qubes-builderv2/builder.lock
     flock -x 9
+    builderv2=true
+fi
+
+for builder in builder-r*; do
+    if [ -z "$builderv2" ]; then
+        exec 9<$builder/builder.lock
+        flock -x 9
+    fi
     rel=${builder#builder-}
     rel=${rel%%-*}
     # remove temporary build files
-    rm -rf $builder/chroot-*/home/user/rpmbuild/BUILD
-    rm -rf $builder/chroot-*/home/user/qubes-src/*
-    rm -rf $builder/qubes-src/installer-qubes-os/build
-    rm -f $builder/qubes-src/installer-qubes-os/yum/*/rpm/*.rpm
-    rm -f $builder/qubes-src/linux-kernel*/*.tar.gz
-    rm -f $builder/qubes-src/linux-kernel*/*.tar.xz
-    rm -f $builder/qubes-src/linux-kernel*/*.tar
-    rm -f $builder/qubes-src/vmm-xen-stubdom-linux/dl/*.tar
-    rm -rf $builder/chroot-*/home/user/.ccache
-    sudo rm -rf $builder/chroot-*/var/cache/pungi/*
-    find $builder/chroot-*/var/cache/apt/archives -type f -print0 |sudo xargs -0r rm -f
-    # builderv2
-    rm -f $builder/distfiles/linux-kernel*/*.tar
-    # remove all but latest version of a package in current-testing
-    # repositories
-    for repotype in current-testing; do
-        for repo in $builder/qubes-src/linux-yum/${rel}/$repotype/*/fc*; do
+    if [ -z "$builderv2" ]; then
+        # builderv1
+        rm -rf $builder/chroot-*/home/user/rpmbuild/BUILD
+        rm -rf $builder/chroot-*/home/user/qubes-src/*
+        rm -rf $builder/qubes-src/installer-qubes-os/build
+        rm -f $builder/qubes-src/installer-qubes-os/yum/*/rpm/*.rpm
+        rm -f $builder/qubes-src/linux-kernel*/*.tar.gz
+        rm -f $builder/qubes-src/linux-kernel*/*.tar.xz
+        rm -f $builder/qubes-src/linux-kernel*/*.tar
+        rm -f $builder/qubes-src/vmm-xen-stubdom-linux/dl/*.tar
+        rm -rf $builder/chroot-*/home/user/.ccache
+        sudo rm -rf $builder/chroot-*/var/cache/pungi/*
+        find $builder/chroot-*/var/cache/apt/archives -type f -print0 |sudo xargs -0r rm -f
+        # remove all but latest version of a package in current-testing
+        # repositories
+        for repotype in current-testing; do
+            for repo in $builder/qubes-src/linux-yum/${rel}/$repotype/*/fc*; do
+                repomanage -o $repo 2>/dev/null | xargs -r rm
+            done
+        done
+        # remove packages not linked to any repository anymore
+        find $builder/qubes-src/*/pkgs -type f -name '*.rpm' -links -3 -exec rm {} +
+        for repo in $builder/qubes-packages-mirror-repo/*; do
             repomanage -o $repo 2>/dev/null | xargs -r rm
         done
-    done
-    # remove packages not linked to any repository anymore
-    find $builder/qubes-src/*/pkgs -type f -name '*.rpm' -links -3 -exec rm {} +
-    for repo in $builder/qubes-packages-mirror-repo/*; do
-        repomanage -o $repo 2>/dev/null | xargs -r rm
-    done
-    for repotype in templates-community templates-community-testing templates-itl templates-itl-testing; do
-        repomanage -o $builder/qubes-src/linux-yum/${rel}/$repotype 2>/dev/null | xargs -r rm
-    done
-    if [ -d $builder/qubes-src/linux-template-builder/rpm/noarch ]; then
-        find $builder/qubes-src/linux-template-builder/rpm/noarch -type f -name '*.rpm' -links -2 -exec rm {} +
+        for repotype in templates-community templates-community-testing templates-itl templates-itl-testing; do
+            repomanage -o $builder/qubes-src/linux-yum/${rel}/$repotype 2>/dev/null | xargs -r rm
+        done
+        if [ -d $builder/qubes-src/linux-template-builder/rpm/noarch ]; then
+            find $builder/qubes-src/linux-template-builder/rpm/noarch -type f -name '*.rpm' -links -2 -exec rm {} +
+        fi
+    else
+        # builderv2
+        rm -f $builder/distfiles/linux-kernel*/*.tar
+        for repotype in templates-community templates-community-testing templates-itl templates-itl-testing; do
+            repomanage -o $builder/repository-publish/rpm/${rel}/$repotype 2>/dev/null | xargs -r rm
+        done
     fi
+    # common
     # remove "pre" iso builds
     rm -f $builder/iso/*pre*
-    exec 9<&-
+    if [ -z "$builderv2" ]; then
+        exec 9<&-
+    fi
 done
 
 find builder-github-logs -type f -mtime +30 -exec rm {} +
+
+if [ -n "$builderv2" ]; then
+    exec 9<&-
+fi
 
 # vim: ts=4 et sw=4
