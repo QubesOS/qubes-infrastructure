@@ -137,6 +137,33 @@ gpg --import /home/user/qubes-developers-keys.asc:
     - user: user
     - mode: 0644
 
+/usr/local/bin/builder-cleanup:
+  file.managed:
+    - source: salt://build-infra/builder-cleanup
+    - mode: 0755
+
+/home/user/.config/systemd/user/builder-cleanup.service:
+  file.managed:
+    - source: salt://build-infra/builder-cleanup.service
+    - mode: 0644
+    - user: user
+    - makedirs: true
+
+/home/user/.config/systemd/user/builder-cleanup.timer:
+  file.managed:
+    - source: salt://build-infra/builder-cleanup.timer
+    - mode: 0644
+    - user: user
+    - makedirs: true
+
+/home/user/.config/systemd/user/timers.target.wants/builder-cleanup.timer:
+  file.symlink:
+    - target: ../builder-cleanup.timer
+    - force: True
+    - mode: 0755
+    - makedirs: True
+
+
 /home/user/.config/systemd/user/upload-release-status.service:
   file.managed:
     - contents: |
