@@ -216,7 +216,7 @@ github.com:
 {{builder}}-check:
   cmd.script:
     - source: salt://build-infra/safe-checkout-sha
-    - args: "-- https://github.com/QubesOS/qubes-builder {{ builder }} 782b55f8fe8d4923497105ccf87d34efd8457f41"
+    - args: "-- https://github.com/QubesOS/qubes-builder {{ builder }} 3d3e766de05b37cd858f0d3cb2c6ebf716510cd8"
     - runas: user
     - creates: {{builder}}
 
