@@ -38,7 +38,9 @@ builder-dependencies:
       - python3-pygithub
       - openssl
       - tree
+      - sequoia-sq
       - sequoia-sqv
+      - sequoia-chameleon-gnupg
 # for mkmetalink
       - python3-aiohttp
       - python3-lxml
