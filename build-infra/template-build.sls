@@ -32,6 +32,7 @@ builder-dependencies:
       - flex
       - bison
 # extra for builderv2
+      - pykickstart
       - python3-packaging
       - python3-pathspec
       - python3-debian
