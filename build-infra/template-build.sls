@@ -12,6 +12,11 @@ builder-dependencies:
       - rpmdevtools
       - dialog
       - curl
+      {%- if grains['os'] == 'Fedora' and grains['osmajorrelease'] >= 41 -%}
+      - wget2-wget
+      {% else -%}
+      - wget
+      {% endif -%}
       - qubes-gpg-split
       - python3-pyyaml
       - mock
