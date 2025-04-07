@@ -11,7 +11,6 @@ builder-dependencies:
       - python3-sh
       - rpmdevtools
       - dialog
-      - wget
       - curl
       - qubes-gpg-split
       - python3-pyyaml
@@ -51,6 +50,9 @@ builder-dependencies:
       - pacman
       - m4
       - asciidoc
+# windows builds
+      - genisoimage
+      - osslsigncode
 
 
 # enable ripemd160 hash, necessary for metalink

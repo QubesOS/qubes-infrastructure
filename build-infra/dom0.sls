@@ -55,6 +55,15 @@ keys-{{env}}:
       - template: {{ salt['pillar.get']('build-infra:keys-template', 'fedora-40-minimal') }}
       - netvm: none
 
+{%- if salt['pillar.get']('build-infra:build-envs:' + env + ':windows', False) %}
+win-keys-{{env}}:
+  qvm.vm:
+    - present:
+      - label: black
+    - prefs:
+      - template: {{ salt['pillar.get']('build-infra:keys-template', 'fedora-40-minimal') }}
+      - netvm: none
+{% endif %}
 {% endfor %}
 
 ###
@@ -88,6 +97,24 @@ keys-{{env}}:
 {%- else %}
         qubesbuilder.ExportDisk * build-{{env}} dom0 allow
         qubesbuilder.CopyTemplateBack * @anyvm build-{{env}} allow
+{%- endif %}
+{%- if salt['pillar.get']('build-infra:build-envs:' + env + ':windows', False) %}
+        admin.vm.CreateDisposable        *  build-{{env}}  builder-windows-dvm         allow  target=dom0
+        admin.vm.CurrentState            *  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
+        admin.vm.device.block.Available  *  build-{{env}}  build-{{env}}  allow  target=dom0
+        admin.vm.device.block.Attach     +build-{{env}}+loop0  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
+        admin.vm.device.block.Attach     +build-{{env}}+loop1  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
+        admin.vm.device.block.Attach     +build-{{env}}+loop2  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
+        admin.vm.device.block.Attach     +build-{{env}}+loop3  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
+        qubesbuilder.WinSign.Timestamp   *  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow
+        qubesbuilder.WinFileCopyIn       *  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow
+        qubesbuilder.WinFileCopyOut      *  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow
+
+        qubesbuilder.WinSign.QueryKey   +Qubes__Windows__Tools  build-{{env}}  @default  allow target=win-keys-{{env}}
+        qubesbuilder.WinSign.CreateKey  +Qubes__Windows__Tools  build-{{env}}  @default  allow target=win-keys-{{env}}
+        qubesbuilder.WinSign.DeleteKey  +Qubes__Windows__Tools  build-{{env}}  @default  allow target=win-keys-{{env}}
+        qubesbuilder.WinSign.GetCert    +Qubes__Windows__Tools  build-{{env}}  @default  allow target=win-keys-{{env}}
+        qubesbuilder.WinSign.Sign       +Qubes__Windows__Tools  build-{{env}}  @default  allow target=win-keys-{{env}}
 {%- endif %}
 {%- endfor %}
 

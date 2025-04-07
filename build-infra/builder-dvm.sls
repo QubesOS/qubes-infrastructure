@@ -10,6 +10,12 @@
     - mode: 0755
     - source: salt://build-infra/qubes-builderv2/rpc/qubesbuilder.FileCopyOut
 
+/usr/local/etc/qubes-rpc/qubesbuilder.WinSign.Timestamp:
+  file.managed:
+    - makedirs: True
+    - mode: 0755
+    - source: salt://build-infra/qubes-builderv2/rpc/qubesbuilder.WinSign.Timestamp
+
 /rw/bind-dirs/builder:
   file.directory: []
 

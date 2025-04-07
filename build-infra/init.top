@@ -17,6 +17,7 @@ base:
 {%- endfor %}
 {%- for env in salt['pillar.get']('build-infra:build-envs', {}).keys() %}
   {% set builderv2 = salt['pillar.get']('build-infra:build-envs:' + env + ':builderv2', False) %}
+  {% set windows = salt['pillar.get']('build-infra:build-envs:' + env + ':windows', False) %}
   keys-{{env}}:
     - build-infra.keys-vm
   build-{{env}}:
@@ -25,5 +26,9 @@ base:
     - build-infra.mkmetalink
   {% else %}
     - build-infra.build-vm
+  {% endif %}
+  {% if windows %}
+  win-keys-{{env}}:
+    - build-infra.win-keys-vm
   {% endif %}
 {%- endfor %}

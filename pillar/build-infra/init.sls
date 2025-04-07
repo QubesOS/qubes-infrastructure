@@ -43,6 +43,8 @@ build-infra:
                 - component: release-configs
       volume-size: 20GiB
       logs: logs
+      # setup for building windows tools too
+      windows: true
     kernel:
       builders-list:
         /home/user/builder-r4.1-kernel:
