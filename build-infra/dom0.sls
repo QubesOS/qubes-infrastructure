@@ -98,9 +98,9 @@ win-keys-{{env}}:
         qubesbuilder.ExportDisk * build-{{env}} dom0 allow
         qubesbuilder.CopyTemplateBack * @anyvm build-{{env}} allow
 {%- endif %}
+        admin.vm.CurrentState            *  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
 {%- if salt['pillar.get']('build-infra:build-envs:' + env + ':windows', False) %}
         admin.vm.CreateDisposable        *  build-{{env}}  builder-windows-dvm         allow  target=dom0
-        admin.vm.CurrentState            *  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
         admin.vm.device.block.Available  *  build-{{env}}  build-{{env}}  allow  target=dom0
         admin.vm.device.block.Attach     +build-{{env}}+loop0  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
         admin.vm.device.block.Attach     +build-{{env}}+loop1  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
