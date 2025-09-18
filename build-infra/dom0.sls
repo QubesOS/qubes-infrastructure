@@ -7,7 +7,7 @@ builder-dvm:
     - present:
       - label: green
     - prefs:
-      - template: {{ salt['pillar.get']('build-infra:build-template', 'fedora-41') }}
+      - template: {{ salt['pillar.get']('build-infra:build-template', 'fedora-42') }}
       - netvm: {{ salt['pillar.get']('build-infra:build-netvm', 'sys-whonix') }}
       - dispvm-allowed: True
 
@@ -23,7 +23,7 @@ volume-builder-dvm:
     - present:
       - label: green
     - prefs:
-      - template: {{ salt['pillar.get']('build-infra:logs-template', 'fedora-41') }}
+      - template: {{ salt['pillar.get']('build-infra:logs-template', 'fedora-42') }}
       - netvm: {{ salt['pillar.get']('build-infra:logs-netvm', 'sys-firewall') }}
 {%- endfor %}
 
@@ -35,7 +35,7 @@ build-{{env}}:
     - present:
       - label: green
     - prefs:
-      - template: {{ salt['pillar.get']('build-infra:build-template', 'fedora-41') }}
+      - template: {{ salt['pillar.get']('build-infra:build-template', 'fedora-42') }}
       - netvm: {{ salt['pillar.get']('build-infra:build-netvm', 'sys-whonix') }}
 {% if salt['pillar.get']('build-infra:build-envs:' + env + ':builderv2', False) %}
       - default-dispvm: builder-dvm
@@ -52,7 +52,7 @@ keys-{{env}}:
     - present:
       - label: black
     - prefs:
-      - template: {{ salt['pillar.get']('build-infra:keys-template', 'fedora-41-minimal') }}
+      - template: {{ salt['pillar.get']('build-infra:keys-template', 'fedora-42-minimal') }}
       - netvm: none
 
 {%- if salt['pillar.get']('build-infra:build-envs:' + env + ':windows', False) %}
@@ -61,7 +61,7 @@ win-keys-{{env}}:
     - present:
       - label: black
     - prefs:
-      - template: {{ salt['pillar.get']('build-infra:keys-template', 'fedora-41-minimal') }}
+      - template: {{ salt['pillar.get']('build-infra:keys-template', 'fedora-42-minimal') }}
       - netvm: none
 {% endif %}
 {% endfor %}
