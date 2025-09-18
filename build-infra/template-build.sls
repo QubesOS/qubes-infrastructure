@@ -23,6 +23,7 @@ builder-dependencies:
       - pbuilder
       - reprepro
       - nosync
+      - dosfstools
 # dpkg-scanpackages
       - perl-Digest-MD5
       - perl-Digest-SHA
