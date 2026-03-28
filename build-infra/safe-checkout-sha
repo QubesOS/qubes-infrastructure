@@ -17,5 +17,5 @@ fi
 cd -- "$directory"
 git reset --hard "$sha"
 git checkout
-git update-ref FETCH_HEAD "$sha"
+rm -f .git/FETCH_HEAD
 success=yes
