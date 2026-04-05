@@ -1,9 +1,14 @@
 #!/usr/bin/python3
 
 import datetime
+import os
 import subprocess
 import sys
-import tempfile
+from pathlib import Path
+
+
+BUILDERS_LIST = Path.home() / ".config/qubes-builder-github/builders.list"
+GITHUB_COMMAND = "/usr/local/lib/qubes-builder-github/github-command.py"
 
 
 def main():
@@ -11,23 +16,30 @@ def main():
         raise ValueError("Provide Qubes OS release! For example '4.2'.")
 
     release = sys.argv[1]
+    release_name = f"r{release}"
     timestamp = datetime.datetime.now(datetime.UTC).strftime("%Y%m%d%H%M")
-    with tempfile.TemporaryDirectory() as tmpdir:
+    iso_version = f"{release}.{timestamp}"
 
-        with open(f"{tmpdir}/timestamp", "w") as f:
-            f.write(timestamp)
-
-        with open(f"{tmpdir}/command", "w") as f:
-            f.write(f"Build-iso r{release} {release}.{timestamp} {timestamp}")
-
+    for line in BUILDERS_LIST.read_text().splitlines():
+        builder_release_name, builder_dir_str, builder_conf = line.split("=")
+        if builder_release_name != release_name:
+            continue
+        if not Path(builder_dir_str).exists():
+            continue
         cmd = [
-            str(f"/usr/local/lib/qubes-builder-github/github-command.py"),
+            GITHUB_COMMAND,
+            "action",
             "--no-signer-github-command-check",
-            "Build-iso",
-            f"{tmpdir}/command",
+            "build-iso",
+            builder_dir_str,
+            builder_conf,
+            iso_version,
+            timestamp,
         ]
-
-        subprocess.Popen(cmd)
+        subprocess.Popen(cmd, env={
+            "PYTHONPATH": f"{builder_dir_str}:{os.environ.get('PYTHONPATH', '')}",
+            **os.environ,
+        })
 
 
 if __name__ == "__main__":
