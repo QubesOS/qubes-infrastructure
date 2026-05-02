@@ -1,6 +1,6 @@
 base:
-  # assume sys-net is on fedora-42-xfce template
-  fedora-42-xfce:
+  # assume sys-net is on fedora-43-xfce template
+  fedora-43-xfce:
     - build-infra.template-net
   {{ salt['pillar.get']('build-infra:netvm', 'sys-net') }}:
     - build-infra.webhooks-base
