@@ -237,7 +237,7 @@ github.com:
 builder-checkout:
   cmd.script:
     - source: salt://build-infra/safe-checkout-sha
-    - args: "-- https://github.com/QubesOS/qubes-builderv2 {{ builder_dir }} bcb20f285b9fc729217d3efb60c56dd55b152c80"
+    - args: "-- https://github.com/QubesOS/qubes-builderv2 {{ builder_dir }} a0e5435dfa2e9a122d2c6806fdce0eeaa7cdfbf7"
     - runas: user
     - creates: {{builder_dir}}
 
@@ -245,7 +245,7 @@ builder-checkout:
 builder-github-checkout:
   cmd.script:
     - source: salt://build-infra/safe-checkout-sha
-    - args: "-- https://github.com/QubesOS/qubes-builderv2-github {{ builder_github_dir }} afc53f0b7c24a45be4dcca9b354c526edaf102f9"
+    - args: "-- https://github.com/QubesOS/qubes-builderv2-github {{ builder_github_dir }} 51ae8ffefec0d2fdc2f0467a12aff673c401e6d3"
     - runas: user
     - creates: {{builder_github_dir}}
 
