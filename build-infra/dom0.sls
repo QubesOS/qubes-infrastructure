@@ -87,6 +87,7 @@ win-keys-{{env}}:
         
         admin.vm.Start * build-{{env}} @tag:disp-created-by-build-{{env}} allow target=dom0
         admin.vm.Kill * build-{{env}} @tag:disp-created-by-build-{{env}} allow target=dom0
+        admin.vm.Remove * build-{{env}} @tag:disp-created-by-build-{{env}} allow target=dom0
         
         qubes.Filecopy * build-{{env}} @tag:disp-created-by-build-{{env}} allow
         qubesbuilder.FileCopyIn * build-{{env}} @tag:disp-created-by-build-{{env}} allow
@@ -102,19 +103,23 @@ win-keys-{{env}}:
 {%- if salt['pillar.get']('build-infra:build-envs:' + env + ':windows', False) %}
         admin.vm.CreateDisposable        *  build-{{env}}  builder-windows-dvm         allow  target=dom0
         admin.vm.device.block.Available  *  build-{{env}}  build-{{env}}  allow  target=dom0
-        admin.vm.device.block.Attach     +build-{{env}}+loop0  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
-        admin.vm.device.block.Attach     +build-{{env}}+loop1  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
-        admin.vm.device.block.Attach     +build-{{env}}+loop2  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
-        admin.vm.device.block.Attach     +build-{{env}}+loop3  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
+        admin.vm.device.block.Attach     +build-{{env}}+loop0+_  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
+        admin.vm.device.block.Attach     +build-{{env}}+loop1+_  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
+        admin.vm.device.block.Attach     +build-{{env}}+loop2+_  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
+        admin.vm.device.block.Attach     +build-{{env}}+loop3+_  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
+        admin.vm.device.block.Assign     +build-{{env}}+loop0+_  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
+        admin.vm.device.block.Assign     +build-{{env}}+loop1+_  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
+        admin.vm.device.block.Assign     +build-{{env}}+loop2+_  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
+        admin.vm.device.block.Assign     +build-{{env}}+loop3+_  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow  target=dom0
         qubesbuilder.WinSign.Timestamp   *  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow
         qubesbuilder.WinFileCopyIn       *  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow
         qubesbuilder.WinFileCopyOut      *  build-{{env}}  @tag:disp-created-by-build-{{env}}  allow
 
-        qubesbuilder.WinSign.QueryKey   +Qubes__Windows__Tools  build-{{env}}  @default  allow target=win-keys-{{env}}
-        qubesbuilder.WinSign.CreateKey  +Qubes__Windows__Tools  build-{{env}}  @default  allow target=win-keys-{{env}}
-        qubesbuilder.WinSign.DeleteKey  +Qubes__Windows__Tools  build-{{env}}  @default  allow target=win-keys-{{env}}
-        qubesbuilder.WinSign.GetCert    +Qubes__Windows__Tools  build-{{env}}  @default  allow target=win-keys-{{env}}
-        qubesbuilder.WinSign.Sign       +Qubes__Windows__Tools  build-{{env}}  @default  allow target=win-keys-{{env}}
+        qubesbuilder.WinSign.QueryKey   *  build-{{env}}  @default  allow target=win-keys-{{env}}
+        qubesbuilder.WinSign.CreateKey  *  build-{{env}}  @default  allow target=win-keys-{{env}}
+        qubesbuilder.WinSign.DeleteKey  *  build-{{env}}  @default  allow target=win-keys-{{env}}
+        qubesbuilder.WinSign.GetCert    *  build-{{env}}  @default  allow target=win-keys-{{env}}
+        qubesbuilder.WinSign.Sign       *  build-{{env}}  @default  allow target=win-keys-{{env}}
 {%- endif %}
 {%- endfor %}
 
