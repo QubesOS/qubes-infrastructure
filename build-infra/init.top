@@ -3,9 +3,9 @@
 base:
   dom0:
     - build-infra.dom0
-  {{ salt['pillar.get']('build-infra:build-template', 'fedora-43-xfce') }}:
+  {{ salt['pillar.get']('build-infra:build-template', 'fedora-44-xfce') }}:
     - build-infra.template-build
-  {{ salt['pillar.get']('build-infra:keys-template', 'fedora-43-minimal') }}:
+  {{ salt['pillar.get']('build-infra:keys-template', 'fedora-44-minimal') }}:
     - build-infra.template-keys
 {% if any_builderv2 %}
   builder-dvm:
