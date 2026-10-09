@@ -24,6 +24,7 @@ builder-dependencies:
       - reprepro
       - nosync
       - dosfstools
+      - rsync
 # dpkg-scanpackages
       - perl-Digest-MD5
       - perl-Digest-SHA
