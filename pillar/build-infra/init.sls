@@ -9,6 +9,10 @@ build-infra:
 #  build-netvm: sys-whonix
 #  keys-template: fedora-44-minimal
 
+# Install cronie and python3-openqa_client in build template,
+# needed by build VMs building ISO:
+#  iso-builder: False
+
 # example list of build environments:
   build-envs:
     fedora1:

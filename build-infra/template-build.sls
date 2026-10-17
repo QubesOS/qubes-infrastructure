@@ -34,6 +34,10 @@ builder-dependencies:
       - python3-gnupg
 # for release ISO process
       - mktorrent
+      {% if salt['pillar.get']('build-infra:iso-builder', False) -%}
+      - cronie
+      - python3-openqa_client
+      {% endif -%}
 # for kernel config
       - flex
       - bison
