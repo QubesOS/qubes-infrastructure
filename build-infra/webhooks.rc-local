@@ -9,8 +9,8 @@ else
   iptables -I INPUT -p tcp -s 140.82.112.0/20 --dport 80 -j ACCEPT
 fi
 
-ln -s /rw/config/webhooks.nginx /etc/nginx/default.d/webhooks.conf
-ln -s /home/user/webhooks/webhooks.service /etc/systemd/system/webhooks.service
+cp /rw/config/webhooks.nginx /etc/nginx/default.d/webhooks.conf
+cp /home/user/webhooks/webhooks.service /etc/systemd/system/webhooks.service
 
 mkdir -p /run/webhooks
 chown user:nginx /run/webhooks
